@@ -30,14 +30,14 @@ from text-cleaner import clean
 
 cleaned_text = clean(
     "text to be cleaned",
-    char_to_preserve=[],            # list of characters to preserve i.e. forbidden to convert or strip
-    char_to_replace={},             # dictionary of chars to replace e.g. {'a': 'x'} converts all 'a' found to 'x'
-    alphabet=[],                    # list of the desired alphabet (Icelandic as default)
+    char_to_preserve=[],            # list of characters forbidden to convert or strip
+    char_to_replace={},             # dictionary of characers to convert
+    alphabet=[],                    # list of the alphabet letters used (Icelandic as default)
     punctuation_set=[],             # list of punctuations (we strip the rest)
     clean_emoji=True,               # clean emojis i.e. replace them
     clean_punctuation=False,        # clean punctuation i.e. replace them
     replace_emoji_with="",          # replace all emojis with custom char
-    replace_punctuation_with="",    # replace all punctuation with a custom string / char
+    replace_punctuation_with="",    # replace all punctuation with a string / char
 )
 ```
 *The default parameters are listed above*
