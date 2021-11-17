@@ -35,7 +35,7 @@ cleaned_text = clean(
     alphabet=[],                    # list of the desired alphabet (Icelandic as default)
     punctuation_set=[],             # list of punctuations (we strip the rest)
     clean_emoji=True,               # clean emojis i.e. replace them
-    clean_punctuation=False,        # clean punctuation i.e. replace them with      remove, do nothing, replace
+    clean_punctuation=False,        # clean punctuation i.e. replace them
     replace_emoji_with="",          # replace all emojis with custom char
     replace_punctuation_with="",    # replace all punctuation with a custom string / char
 )
