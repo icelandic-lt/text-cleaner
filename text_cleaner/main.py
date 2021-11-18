@@ -17,14 +17,14 @@ def update_replacement_dictionary(char_to_replace, replacement):
     um.unified_dictionary.update(dict)
 
 def clean(
-    text,                              
-    char_to_preserve=[],                
-    char_to_replace={},                 
-    alphabet=[],                      
-    punct_set=[],                 
-    clean_emoji=True,                   
-    clean_punct=False,                  
-    replace_emoji_with="",              
+    text,
+    char_to_preserve=[],
+    char_to_replace={},
+    alphabet=[],
+    punct_set=[],
+    clean_emoji=True,
+    clean_punct=False,
+    replace_emoji_with="",
     replace_punct_with="",
 ):
 
@@ -65,7 +65,7 @@ def clean(
 
     text = un.normalize_encoding(text)
     text = un.normalize_alphabet(text)
-        
+    
     return text
 
 def parse_arguments():
@@ -77,8 +77,6 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    strengur = 'hi'
-    print(len(strengur))
     print(clean(text, 
                 #char_to_preserve=['c'],
                 #char_to_replace={'t': 's'},
