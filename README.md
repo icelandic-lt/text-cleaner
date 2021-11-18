@@ -33,11 +33,11 @@ cleaned_text = clean(
     char_to_preserve=[],            # list of characters forbidden to convert or strip
     char_to_replace={},             # dictionary of characers to convert
     alphabet=[],                    # list of the alphabet letters used (Icelandic as default)
-    punctuation_set=[],             # list of punctuations (we strip the rest)
+    punct_set=[],                   # list of punctuations (we strip the rest)
     clean_emoji=True,               # clean emojis i.e. replace them
-    clean_punctuation=False,        # clean punctuation i.e. replace them
+    clean_punct=False,              # clean punctuation i.e. replace them
     replace_emoji_with="",          # replace all emojis with custom char
-    replace_punctuation_with="",    # replace all punctuation with a string / char
+    replace_punct_with="",          # replace all punctuation with a string / char
 )
 ```
 *The default parameters are listed above*

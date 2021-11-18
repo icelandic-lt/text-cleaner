@@ -17,38 +17,50 @@ def update_replacement_dictionary(char_to_replace, replacement):
     um.unified_dictionary.update(dict)
 
 def clean(
-    text,                               # text to be cleaned
-    char_to_preserve=[],                # list of characters to preserve i.e. forbidden to convert or strip
-    char_to_replace={},                 # dictionary of chars to replace e.g. {'a': 'x'} converts all 'a' found to 'x'
-    alphabet=[],                        # list of the desired alphabet (Icelandic as default)
-    punctuation_set=[],                 # list of punctuations (we strip the rest)
-    clean_emoji=True,                   # clean emojis i.e. replace them
-    punctuation=False,                  # clean punctuation i.e. replace them
-    replace_emoji_with="",              # replace all emojis with custom char
-    replace_punctuation_with="",        # replace all punctuation with a custom string / char
-    ):
+    text,                              
+    char_to_preserve=[],                
+    char_to_replace={},                 
+    alphabet=[],                      
+    punct_set=[],                 
+    clean_emoji=True,                   
+    clean_punct=False,                  
+    replace_emoji_with="",              
+    replace_punct_with="",
+):
 
     """
     Process (clean) the raw input text for NLP (Natural Language Processing) by removing 
     unhelpful and unusable data, as well as reducing noise.
     
     Text cleaning is task specific so multiple configurations are available.
-    TODO: 
+    Args:
+                      text: raw text for cleaning                       
+          char_to_preserve: list of char types forbidden to strip or convert
+           char_to_replace: dictionary of characters to convert     
+                  alphabet: list of char that don't need converting     
+                 punct_set: list of punctuation marks set to preserve
+               clean_emoji: if True, convert emojis to the value of "replace_emoji_with"
+               clean_punct: if True, convert punctuations to the value of "replace_punct_with
+        replace_emoji_with: str to replace emojis with        
+        replace_punct_with: str to replace punctuations with
+
+    Returns:
+        str: cleaned text based on function args
     """
     
     if char_to_preserve:
         PRESERVE_SET = char_to_preserve
     if char_to_replace:
         um.unified_dictionary.update(char_to_replace)
-    if punctuation_set:
-        un.PUNCTUATION_SET = punctuation_set
+    if punct_set:
+        un.PUNCT_SET = punct_set
     if alphabet:
         un.CHAR_SET = alphabet
-    if replace_punctuation_with:
-        update_replacement_dictionary(punctuation_set, replace_punctuation_with)
+    if replace_punct_with:
+        update_replacement_dictionary(punct_set, replace_punct_with)
     if clean_emoji:
         text = re.sub(EMOJI_PATTERN, replace_emoji_with, text)
-    if punctuation:
+    if clean_punct:
         print('punctuation')
 
     text = un.normalize_encoding(text)
@@ -65,15 +77,17 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
+    strengur = 'hi'
+    print(len(strengur))
     print(clean(text, 
                 #char_to_preserve=['c'],
                 #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
-                #punctuation_set=[',','.'],
+                #punct_set=[',','.'],
                 #clean_emoji=True,
-                #punctuation=False,
+                #clean_punct=False,
                 #replace_emoji_with="<emoji>",
-                #replace_punctuation_with="  <punctuation>  ",
+                #replace_punct_with="  <punctuation>  ",
                 ))
 
 if __name__ == '__main__':

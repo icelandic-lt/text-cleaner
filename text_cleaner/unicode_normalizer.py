@@ -9,7 +9,7 @@ alphabet, and also delete or substitue a number of punctuation characters and sp
 # the Icelandic alphabet
 CHAR_SET = ['a', 'á', 'b', 'd', 'ð', 'e', 'é', 'f', 'g', 'h', 'i', 'í', 'j', 'k', 'l', 'm', 'n', 'o', 'ó', 'p', 'r',
             's', 't', 'u', 'ú', 'v', 'y', 'ý', 'þ', 'æ', 'ö', 'x']
-PUNCTUATION_SET = ['.',',',':','!','?']
+PUNCT_SET = ['.',',',':','!','?']
 
 def normalize_encoding(text):
     """ Normalize the unicode encoding of the input text. This includes deleting or substituting certain characters
@@ -78,7 +78,7 @@ def normalize_alphabet(sentences):
                         token = token.replace(char, ",")
                     # we want to keep punctuation marks still present in the normalized
                     # string, but delete the unknown character otherwise
-                    elif char not in PUNCTUATION_SET:
+                    elif char not in PUNCT_SET:
                         token = token.replace(char, "") # TODO: to replace with can probably be passed in as a variable
 
             # we restore the original string with valid words / characters only
