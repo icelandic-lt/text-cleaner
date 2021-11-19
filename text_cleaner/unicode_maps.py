@@ -50,7 +50,7 @@ insert_space_map = {
     '\u0095': " ",  # message waiting
     '\u00a0': " ",  # no-break space
     '\u200b': " ",  # zero width space
-    '\u2028': " ",  # line spearator
+    '\u2028': " ",  # line separator
     '\u2192': " ",  # rightwards arrow
     '\u220f': " ",  # n-ary product -> why delete?
     '\ufa07': " "  # ideograph spokes of wheel CJK -> check this range, CJK
@@ -148,10 +148,10 @@ diverse_substitutions = {
     '\u2014': "-",  # em dash
     '\u2019': "'",  # right single quotation mark
     '\u201a': ",",  # single low-9 quotation mark
-    '\u201c': "\"",  # left double qoutation mark
-    '\u201d': "\"",  # right double qoutation mark
-    '\u201e': "\"",  # double low-9 qoutation mark
-    '\u201f': "\"",  # double high-reversed-9 qoutation mark
+    '\u201c': "\"",  # left double quotation mark
+    '\u201d': "\"",  # right double quotation mark
+    '\u201e': "\"",  # double low-9 quotation mark
+    '\u201f': "\"",  # double high-reversed-9 quotation mark
     '\u2212': "-",  # minus sign
     '\u2713': "-",  # check mark -> why this substitution?
     '\u0100': "A",  # latin capital letter A with macron (long a)
@@ -166,8 +166,8 @@ diverse_substitutions = {
     '\u0113': "e",  # latin small letter e with macron
     '\u011b': "É",  # latin capital letter E with caron, /jE/
     '\u011c': "é",  # latin small letter e with caron, /jE/
-    '\u011e': "G",  # latin capital letter G with breve -> note: should be pronunced /G/ SAMPA
-    '\u011f': "g",  # latin small letter g with breve -> note: should be pronunced /G/ SAMPA
+    '\u011e': "G",  # latin capital letter G with breve -> note: should be pronounced /G/ SAMPA
+    '\u011f': "g",  # latin small letter g with breve -> note: should be pronounced /G/ SAMPA
     '\u0131': "i",  # dotless i
     '\u0141': "Ú",  # latin capital letter L with stroke -> should resemble /w/, rather use 'L' subst?
     '\u0142': "ú",  # latin small letter l with stroke -> should resemble /w/, rather use 'l' subst?
@@ -242,4 +242,4 @@ combining_overline = '\u0305'  # ̅
 combining_breve = '\u0306'  # ̆
 combining_dot_above = '\u0307'  # ̇
 combining_diaeresis = '\u0308'  # ¨ as in ä, ü, ...
-# etc. upto u0362 all kinds of "combining" characters
+# etc. up to u0362 all kinds of "combining" characters
