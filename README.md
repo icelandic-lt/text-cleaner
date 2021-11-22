@@ -4,7 +4,7 @@
 
 Text cleaning module for processing raw text input.
 
-This module is a component of the TTS-Frontend Pipeline, more specifically, it's the first step in processing raw text input before being normalized in the next step.
+This module is a component of the TTS-Frontend Pipeline, more specifically, it is the first step in processing raw text input before being normalized in the next step.
 
 If being used as a part of the TTS-Frontend Pipeline then no configurations should be made, the default values are based on input/output specifications between components in the TTS-Frontend.
 
@@ -52,14 +52,14 @@ print(clean("π á æfmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni
 >>> output: "π á afmæli í dag, bubbi söng :emójí: afmælissønginn í tilefni dagsins."
 
 # we can define what punctuation marks we want to keep, also if we want emojis to be preserved.
-print(clean("sem dæmi: ekki hlaupa á ganginum! hrópar 😱 mamma, amma og pabbi öll í kór.", 
+print(clean("sem dæmi: ekki hlaupa á ganginum! hrópa 😱 mamma, amma og pabbi öll í kór.", 
             clean_emoji=False, punct_set=['.',',']))
->>> output: "sem dæmi ekki hlaupa á ganginum hrópar 😱 mamma, amma og pabbi öll í kór."
+>>> output: "sem dæmi ekki hlaupa á ganginum hrópa 😱 mamma, amma og pabbi öll í kór."
 
 # instead of getting rid of some characters, we can also convert them to a string of our choice. 
-print(clean("sem dæmi: ekki hlaupa á ganginum! hrópar mamma, amma og pabbi öll í kór.", 
+print(clean("sem dæmi: ekki hlaupa á ganginum! hrópa mamma, amma og pabbi öll í kór.", 
             char_to_replace={'æ':'ae', ':': ',', '!': '.'}))
->>> output: "sem daemi, ekki hlaupa á ganginum. hrópar mamma, amma og pabbi öll í kór."
+>>> output: "sem daemi, ekki hlaupa á ganginum. hrópa mamma, amma og pabbi öll í kór."
 ```
 
 
