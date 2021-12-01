@@ -30,6 +30,11 @@ def get_replacement(char):
 def should_delete(char):
     return char in um.delete_chars_map
 
+def clean_foreign_text_occurrence(token):
+            token = token.replace("(e.", "<lang=en>")
+            token = token.replace(")", " <lang=en/>")
+            return token + ' '
+
 def encode_characters(token):
     """ 
     Validates the unicode encoding of the input text. This involves deleting or substituting both
@@ -80,8 +85,8 @@ def clean(
     clean_emoji=True,
     clean_punct=False,
     clean_audiobook=False,
-    replace_emoji_with="",
-    replace_punct_with="",
+    replace_emoji_with='',
+    replace_punct_with='',
 ):
 
     """
@@ -120,22 +125,16 @@ def clean(
         print("clean punctuation")
 
     cleaned_text = ''
-    for token in text: # TODO: WHERE I LEFT OFF, adding more stuff to filter
+    for token in text:
         if token in c.HTML_TAGS or token in c.HTML_CLOSING_TAGS and not clean_audiobook:
-            token = ""
+            token = ''
         elif token in c.HTML_CLOSING_TAGS and clean_audiobook:
-            cleaned_text += ". " # default value for closing html tags
-        elif token.startswith("(e.") and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
-            # TODO: dedicated function for readability 'def clean_foreign_text_occurrence()'
-            token = token.replace("(e.", "<lang=en>")
-            token = token.replace(")", " <lang=en/>")
-            cleaned_text += token + " "
+            cleaned_text += '. ' # default value for closing html tags
+        elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
+            token = clean_foreign_text_occurrence(token)
         else:
-            # default
             token = encode_characters(token) 
-            token = validate_characters(token, char_to_preserve)
-            
-            cleaned_text += token
+            cleaned_text += validate_characters(token, char_to_preserve)
 
     return cleaned_text
 
