@@ -1,9 +1,8 @@
 import argparse
 import re
-import unicode_maps as um
-import unicode_normalizer as un
-import constants as c
-import emoji_dictionary as ed
+import unicode_maps as umaps
+import constants as consts
+import emoji_dictionary as emoji_dicts
 
 EMOJI_PATTERN = "\U0001f469|\u2764" # Temporary for testing TODO: Find a list with extensive coverage of emojis    
 
@@ -16,19 +15,19 @@ def update_replacement_dictionary(char_to_replace, replacement):
     for cr in char_to_replace: 
         dict[cr] = replacement
 
-    um.unified_dictionary.update(dict)
+    umaps.unified_dictionary.update(dict)
 
 def get_ice_alpha_replacement(char):
-    if char in um.post_dict_lookup:
-        return um.post_dict_lookup[char]
+    if char in umaps.post_dict_lookup:
+        return umaps.post_dict_lookup[char]
     return ''
 
 def get_replacement(char):
-    if char in um.unified_dictionary:
-        return um.unified_dictionary[char]
+    if char in umaps.unified_dictionary:
+        return umaps.unified_dictionary[char]
 
 def should_delete(char):
-    return char in um.delete_chars_map
+    return char in umaps.delete_chars_map
 
 def clean_foreign_text_occurrence(token):
     token = token.replace("(e.", "<lang=en>")
@@ -59,7 +58,7 @@ def validate_characters(token, char_to_preserve):
             continue
         elif char.isdigit(): 
             continue
-        elif char.lower() not in c.CHARACTER_ALPHABET and c.PUNCTUATION_MARKS: 
+        elif char.lower() not in consts.character_alphabet and consts.punctuation_marks: 
             replacement = get_ice_alpha_replacement(char)
             if replacement:
                 token = token.replace(char, replacement)
@@ -112,23 +111,23 @@ def clean(
     text = split_into_tokens(text)
     
     if char_to_replace:
-        um.unified_dictionary.update(char_to_replace)
+        umaps.unified_dictionary.update(char_to_replace)
     if punct_set:
-        un.PUNCT_SET = punct_set
+        consts.punctuation_marks = punct_set
     if alphabet:
-        un.CHAR_SET = alphabet
+        consts.character_alphabet = alphabet
     if replace_punct_with:
         update_replacement_dictionary(punct_set, replace_punct_with)
     if clean_emoji:
-        ed.emoji_dict
+        emoji_dicts.emoji_dict
     if clean_punct:
         print("clean punctuation")
 
     cleaned_text = ''
     for token in text:
-        if token in c.HTML_TAGS or token in c.HTML_CLOSING_TAGS and not clean_audiobook:
+        if token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
             token = ''
-        elif token in c.HTML_CLOSING_TAGS and clean_audiobook:
+        elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
             cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
         elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
             token = clean_foreign_text_occurrence(token)
