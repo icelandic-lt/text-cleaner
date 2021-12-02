@@ -129,7 +129,7 @@ def clean(
         if token in c.HTML_TAGS or token in c.HTML_CLOSING_TAGS and not clean_audiobook:
             token = ''
         elif token in c.HTML_CLOSING_TAGS and clean_audiobook:
-            cleaned_text += '. ' # default value for closing html tags
+            cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
         elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
             token = clean_foreign_text_occurrence(token)
         else:
