@@ -73,7 +73,7 @@ def split_into_tokens(text):
     simplify the cleaning process.
     """
     # he following regex demarks a string within parentheses (opening and closing parenthesis) 
-    return re.split("\s(?![^(]*\))", text)
+    return re.split(r"\s(?![^(]*\))", text)
 
 def clean(
     text,
