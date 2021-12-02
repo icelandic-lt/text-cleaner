@@ -196,9 +196,9 @@ diverse_substitutions = {
 }
 
 # merges all replacement dictionaries for simpler look up (does not contain the delete dictionary):
-unified_dictionary = {**insert_space_map, **diverse_substitutions, **arabic_alphabet, **greek_alphabet,
+replacement_dictionary = {**insert_space_map, **diverse_substitutions, **arabic_alphabet, **greek_alphabet,
                       **hebrew_alphabet, **cyrillic_alphabet, **ipa_map}
-
+                      
 # if those characters are found in normalized words not contained in the pronunciation dictionary,
 # we need to replace them with characters from the Icelandic alphabet
 post_dict_lookup = {

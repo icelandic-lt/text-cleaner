@@ -15,7 +15,7 @@ def update_replacement_dictionary(char_to_replace, replacement):
     for cr in char_to_replace: 
         dict[cr] = replacement
 
-    umaps.unified_dictionary.update(dict)
+    umaps.replacement_dictionary.update(dict)
 
 def get_ice_alpha_replacement(char):
     if char in umaps.post_dict_lookup:
@@ -23,8 +23,8 @@ def get_ice_alpha_replacement(char):
     return ''
 
 def get_replacement(char):
-    if char in umaps.unified_dictionary:
-        return umaps.unified_dictionary[char]
+    if char in umaps.replacement_dictionary:
+        return umaps.replacement_dictionary[char]
 
 def should_delete(char):
     return char in umaps.delete_chars_map
@@ -111,7 +111,7 @@ def clean(
     text = split_into_tokens(text)
     
     if char_to_replace:
-        umaps.unified_dictionary.update(char_to_replace)
+        umaps.replacement_dictionary.update(char_to_replace)
     if punct_set:
         consts.punctuation_marks = punct_set
     if alphabet:
@@ -119,7 +119,7 @@ def clean(
     if replace_punct_with:
         update_replacement_dictionary(punct_set, replace_punct_with)
     if clean_emoji:
-        emoji_dicts.emoji_dict
+        emoji_dicts.emoji_dict # TODO: compile into a pattern object
     if clean_punct:
         print("clean punctuation")
 
