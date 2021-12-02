@@ -31,9 +31,9 @@ def should_delete(char):
     return char in um.delete_chars_map
 
 def clean_foreign_text_occurrence(token):
-            token = token.replace("(e.", "<lang=en>")
-            token = token.replace(")", " <lang=en/>")
-            return token + ' '
+    token = token.replace("(e.", "<lang=en>")
+    token = token.replace(")", " <lang=en/>")
+    return token + ' '
 
 def encode_characters(token):
     """ 
