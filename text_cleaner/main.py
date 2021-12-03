@@ -59,11 +59,14 @@ def validate_characters(token, char_to_preserve):
         elif char.isdigit(): 
             continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks: 
+            #print(token)
             replacement = get_ice_alpha_replacement(char)
             if replacement:
                 token = token.replace(char, replacement)
-            else: 
-                char = ''
+            elif (char == '(' or char == ')' or char == '"'):
+                            token = token.replace(char, ",")
+            elif char not in consts.punctuation_marks:
+                token = token.replace(char, ' ')
 
     return token + ' '
 
