@@ -134,6 +134,7 @@ def clean(
             cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
         elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
             token = clean_foreign_text_occurrence(token)
+            cleaned_text += token
         else:
             token = encode_characters(token) 
             cleaned_text += validate_characters(token, char_to_preserve)
