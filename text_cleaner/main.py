@@ -62,8 +62,10 @@ def validate_characters(token, char_to_preserve):
             replacement = get_ice_alpha_replacement(char)
             if replacement:
                 token = token.replace(char, replacement)
-            else: 
-                char = ''
+            elif (char == '(' or char == ')' or char == '"'):
+                            token = token.replace(char, ",")
+            elif char not in consts.punctuation_marks:
+                token = token.replace(char, ' ')
 
     return token + ' '
 
@@ -131,6 +133,7 @@ def clean(
             cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
         elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
             token = clean_foreign_text_occurrence(token)
+            cleaned_text += token
         else:
             token = encode_characters(token) 
             cleaned_text += validate_characters(token, char_to_preserve)
@@ -146,18 +149,16 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    
-    print('the cleaner:', clean(text, 
-                char_to_preserve=['w'],
-                #char_to_replace={'(': 'svigi opnast ', ')': ' svigi lokast'},
+    print(clean(text, 
+                #char_to_preserve=['c'],
+                #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
-                clean_emoji=False,
+                #clean_emoji=True,
                 #clean_punct=False,
-                clean_audiobook=False,
                 #replace_emoji_with="<emoji>",
-                #replace_punct_with="<punctuation>",
+                #replace_punct_with="  <punctuation>  ",
                 ))
-
 if __name__ == '__main__':
     main()
+    
