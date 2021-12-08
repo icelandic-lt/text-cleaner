@@ -59,7 +59,6 @@ def validate_characters(token, char_to_preserve):
         elif char.isdigit(): 
             continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks: 
-            #print(token)
             replacement = get_ice_alpha_replacement(char)
             if replacement:
                 token = token.replace(char, replacement)
@@ -150,18 +149,15 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    
-    print('the cleaner:', clean(text, 
-                char_to_preserve=['w'],
-                #char_to_replace={'(': 'svigi opnast ', ')': ' svigi lokast'},
+    print(clean(text, 
+                #char_to_preserve=['c'],
+                #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
-                clean_emoji=False,
+                #clean_emoji=True,
                 #clean_punct=False,
-                clean_audiobook=False,
                 #replace_emoji_with="<emoji>",
-                #replace_punct_with="<punctuation>",
+                #replace_punct_with="  <punctuation>  ",
                 ))
-
 if __name__ == '__main__':
     main()
