@@ -1,8 +1,8 @@
 import argparse
 import re
-import unicode_maps as umaps
-import constants as consts
-import emoji_dictionary as emoji_dicts
+from text_cleaner import unicode_maps as umaps
+from text_cleaner import constants as consts
+from text_cleaner import emoji_dictionary as emoji_dicts
 
 EMOJI_PATTERN = "\U0001f469|\u2764" # Temporary for testing TODO: Find a list with extensive coverage of emojis    
 
@@ -86,7 +86,7 @@ def clean(
     clean_emoji=True,
     clean_punct=False,
     clean_audiobook=False,
-    replace_emoji_with='',
+    replace_emoji_with='',  
     replace_punct_with='',
 ):
 
@@ -159,6 +159,7 @@ def main():
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))
+
 if __name__ == '__main__':
     main()
     
