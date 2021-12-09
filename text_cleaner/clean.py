@@ -54,7 +54,7 @@ def validate_characters(token, char_to_preserve):
     in constants or the second input 'char_to_preserve'.
     """
     for _, char in enumerate(token):
-        if char in char_to_preserve: # skip cleaning of char if to be preserved  
+        if char in char_to_preserve:
             continue
         elif char.isdigit(): 
             continue
@@ -127,18 +127,20 @@ def clean(
 
     cleaned_text = ''
     for token in text:
-        if token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
-            token = ''
+        if token in char_to_preserve:
+            cleaned_text += token + ' '
+        elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
+            continue # drop it # TODO: possibly merge with below or just replace with a '.' by default
         elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
             cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
-        elif token.startswith('(e.') and clean_audiobook: # this only covers english text and assumes it's prefixed be "(e."
+        elif token.startswith('(e.') and clean_audiobook: # TODO: only covers english text atm and assumes it's prefixed be "(e."
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         else:
-            token = encode_characters(token) 
+            token = encode_characters(token)
             cleaned_text += validate_characters(token, char_to_preserve)
 
-    return cleaned_text
+    return cleaned_text.strip()
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
