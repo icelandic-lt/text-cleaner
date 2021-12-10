@@ -140,6 +140,7 @@ def clean(
             token = encode_characters(token)
             cleaned_text += validate_characters(token, char_to_preserve)
 
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text)
     return cleaned_text.strip()
 
 def parse_arguments():
