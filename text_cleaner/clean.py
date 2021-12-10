@@ -74,7 +74,7 @@ def split_into_tokens(text):
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
     simplify the cleaning process.
     """
-    # he following regex demarks a string within parentheses (opening and closing parenthesis) 
+    # the following regex demarks a string within parentheses (opening and closing parenthesis) 
     return re.split(r"\s(?![^(]*\))", text)
 
 def clean(
