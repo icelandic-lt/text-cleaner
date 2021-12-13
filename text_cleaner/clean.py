@@ -119,7 +119,7 @@ def clean(
     if alphabet:
         consts.character_alphabet = alphabet
     if replace_punct_with:
-        update_replacement_dictionary(punct_set, replace_punct_with)
+        update_replacement_dictionary(consts.punctuation_marks, replace_punct_with)
     if clean_emoji:
         emoji_dicts.emoji_dict # TODO: compile into a pattern object
     if clean_punct:
