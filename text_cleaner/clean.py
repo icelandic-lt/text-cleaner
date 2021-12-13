@@ -30,8 +30,8 @@ def should_delete(char):
     return char in umaps.delete_chars_map
 
 def clean_foreign_text_occurrence(token):
-    token = token.replace("(e.", "<lang=en>")
-    token = token.replace(")", " <lang=en/>")
+    token = token.replace("(e.", "<en>") # TODO: placeholder
+    token = token.replace(")", " </en>")
     return token + ' '
 
 def encode_characters(token):
@@ -127,7 +127,9 @@ def clean(
 
     cleaned_text = ''
     for token in text:
-        if token in char_to_preserve:
+        # compare token with stripped punctuation marks on the off chance
+        # that the punctuation marks are following the preserved token.
+        if token.strip(r",.\?!:") in char_to_preserve:
             cleaned_text += token + ' '
         elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
             continue # drop it # TODO: possibly merge with below or just replace with a '.' by default
