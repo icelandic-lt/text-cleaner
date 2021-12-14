@@ -19,6 +19,10 @@ def update_replacement_dictionary(char_to_replace, replacement):
 
 def get_ice_alpha_replacement(char):
     if char in umaps.post_dict_lookup:
+        for lookup_char in umaps.post_dict_lookup[char].lower():
+            if lookup_char not in consts.character_alphabet:
+                return ''
+        
         return umaps.post_dict_lookup[char]
     return ''
 
@@ -34,19 +38,6 @@ def clean_foreign_text_occurrence(token):
     token = token.replace(")", " </en>")
     return token + ' '
 
-def encode_characters(token):
-    """ 
-    Validates the unicode encoding of the input text. This involves deleting or substituting both
-    characters and symbols, as defined in unicode_maps. 
-    """
-    for char in token:
-        repl = get_replacement(char)
-        if repl:
-            token = token.replace(char, repl)
-        if should_delete(char):
-            token = token.replace(char, '')
-
-    return token
 
 def validate_characters(token, char_to_preserve):
     """
@@ -54,7 +45,12 @@ def validate_characters(token, char_to_preserve):
     in constants or the second input 'char_to_preserve'.
     """
     for _, char in enumerate(token):
-        if char in char_to_preserve:
+        repl = get_replacement(char)
+        if repl:
+            token = token.replace(char, repl)
+        elif should_delete(char):
+            token = token.replace(char, '')
+        elif char in char_to_preserve:
             continue
         elif char.isdigit(): 
             continue
@@ -63,8 +59,8 @@ def validate_characters(token, char_to_preserve):
             if replacement:
                 token = token.replace(char, replacement)
             elif (char == '(' or char == ')' or char == '"'):
-                            token = token.replace(char, ",")
-            elif char not in consts.punctuation_marks:
+                token = token.replace(char, ",")
+            elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
                 token = token.replace(char, ' ')
 
     return token + ' '
@@ -119,6 +115,7 @@ def clean(
     if alphabet:
         consts.character_alphabet = alphabet
     if replace_punct_with:
+        consts.character_alphabet.append(replace_punct_with)
         update_replacement_dictionary(consts.punctuation_marks, replace_punct_with)
     if clean_emoji:
         emoji_dicts.emoji_dict # TODO: compile into a pattern object
@@ -139,7 +136,6 @@ def clean(
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         else:
-            token = encode_characters(token)
             cleaned_text += validate_characters(token, char_to_preserve)
 
     cleaned_text = re.sub(r"\s+", " ", cleaned_text)
