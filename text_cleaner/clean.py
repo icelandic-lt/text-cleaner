@@ -71,7 +71,7 @@ def text_to_tokens(text):
     simplify the cleaning process.
     """
     # the following regex demarks a string within parentheses (opening and closing parenthesis) 
-    return re.split(r"\s(?![^(]*\))", text)
+    return re.split(r'\s(?![^(]*\))', text)
 
 def clean(
     text,
@@ -126,7 +126,7 @@ def clean(
     for token in text:
         # compare token with stripped punctuation marks on the off chance
         # that the punctuation marks are following the preserved token.
-        if token.strip(r",.\?!:") in char_to_preserve:
+        if token.strip(r',.\?!:') in char_to_preserve:
             cleaned_text += token + ' '
         elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
             continue # drop it # TODO: possibly merge with below or just replace with a '.' by default
@@ -138,7 +138,7 @@ def clean(
         else:
             cleaned_text += validate_characters(token, char_to_preserve)
 
-    cleaned_text = re.sub(r"\s+", " ", cleaned_text)
+    cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
 
 def parse_arguments():
