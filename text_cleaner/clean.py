@@ -65,7 +65,7 @@ def validate_characters(token, char_to_preserve):
 
     return token + ' '
 
-def split_into_tokens(text):
+def text_to_tokens(text):
     """
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
     simplify the cleaning process.
@@ -106,7 +106,7 @@ def clean(
         str: cleaned text based on function args
     """
 
-    text = split_into_tokens(text)
+    text = text_to_tokens(text)
     
     if char_to_replace:
         umaps.replacement_dictionary.update(char_to_replace)
