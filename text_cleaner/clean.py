@@ -6,6 +6,7 @@ from text_cleaner import emoji_dictionary as emoji_dicts
 
 EMOJI_PATTERN = "\U0001f469|\u2764" # Temporary for testing TODO: Find a list with extensive coverage of emojis    
 
+
 def update_replacement_dictionary(char_to_replace, replacement):
     """
     Adds the input char_to_replace to the collection of (character replacement) 
@@ -17,6 +18,7 @@ def update_replacement_dictionary(char_to_replace, replacement):
 
     umaps.replacement_dictionary.update(dict)
 
+
 def get_ice_alpha_replacement(char):
     if char in umaps.post_dict_lookup:
         for lookup_char in umaps.post_dict_lookup[char].lower():
@@ -26,12 +28,15 @@ def get_ice_alpha_replacement(char):
         return umaps.post_dict_lookup[char]
     return ''
 
+
 def get_replacement(char):
     if char in umaps.replacement_dictionary:
         return umaps.replacement_dictionary[char]
 
+
 def should_delete(char):
     return char in umaps.delete_chars_map
+
 
 def clean_foreign_text_occurrence(token):
     token = token.replace("(e.", "<en>") # TODO: placeholder
@@ -65,6 +70,7 @@ def validate_characters(token, char_to_preserve):
 
     return token + ' '
 
+
 def text_to_tokens(text):
     """
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
@@ -72,6 +78,7 @@ def text_to_tokens(text):
     """
     # the following regex demarks a string within parentheses (opening and closing parenthesis) 
     return re.split(r'\s(?![^(]*\))', text)
+
 
 def clean(
     text,
@@ -141,12 +148,14 @@ def clean(
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
 
+
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("text", help="a text to be cleaned")
     args = parser.parse_args()
     
     return args.text
+
 
 def main():
     text = parse_arguments()
@@ -160,6 +169,7 @@ def main():
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))
+
 
 if __name__ == '__main__':
     main()
