@@ -42,7 +42,7 @@ def organize_text_in_table(soup):
     return soup
 
 
-def append_punction_to_tag_content(text, html_tag_to_punctuation_mark):    
+def append_punctuation_to_tag_content(text, html_tag_to_punctuation_mark):    
     for tag in html_tag_to_punctuation_mark:
         for text_within_tag in text.find_all(tag):
             text_within_tag.append(html_tag_to_punctuation_mark[tag])
@@ -75,7 +75,7 @@ def clean_html(
     # WIP - Read description for method
     # soup = organize_text_in_table(soup)
 
-    text = append_punction_to_tag_content(soup, html_tag_to_punctuation_mark)
+    text = append_punctuation_to_tag_content(soup, html_tag_to_punctuation_mark)
     text = soup.get_text()
 
     text = remove_whitespace_before_punctuation(text)
