@@ -16,19 +16,17 @@ def test_preserve_characters():
     assert clean.clean("ß Ø", char_to_preserve=['ß']) == "ß Ö"
     assert clean.clean("🤡😎🔥📌", char_to_preserve=['🤡','😎']) == "🤡😎"
     assert clean.clean("∫∬∭∮∯∰∱∲∳", char_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
-    
+    assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
     #  characters stored in unicode_maps
     assert clean.clean("gríski stafurinn \u03a4", char_to_preserve=['\u03a4']) == "gríski stafurinn \u03a4"
     assert clean.clean("hebreski stafurinn \u05db", char_to_preserve=['\u05db']) == "hebreski stafurinn \u05db"
     assert clean.clean("pólski stafurinn ł", char_to_preserve=['ł']) == "pólski stafurinn ł"
-
     # tokens to be preserved
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz']) == "s zz sss ssss"
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
-    assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
-
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == "(Zwoozh) er ekki íslenskt orð."
+    
 def test_clean_html_text():
     ## Audiobooks fall under this category
     # TODO: html clean feature will enable more complex html cleaning. Currently testing naked html text is possible
@@ -61,6 +59,7 @@ def test_replace_character():
     # replace punctuation
     assert clean.clean("hello.", replace_punct_with=' world') == "hello world"
     assert clean.clean("..,,.,.,.,", replace_punct_with='1') == "1111111111"
+    assert clean.clean(".", replace_punct_with='\u03ae') == "\u03ae"
     # character replace
     assert clean.clean("aábdð", char_to_replace={'a': 'k'}) == "kábdð"
     assert clean.clean("abdð", char_to_replace={'ð': 'eéfghi'}) == "kbdeéfghi"
