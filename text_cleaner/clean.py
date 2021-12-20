@@ -80,7 +80,6 @@ def clean(
     alphabet=[],
     punct_set=[],
     clean_emoji=True,
-    clean_punct=False,
     clean_audiobook=False,
     replace_emoji_with='',  
     replace_punct_with='',
@@ -98,7 +97,6 @@ def clean(
         alphabet            : list of char that don't need converting     
         punct_set           : list of punctuation marks set to preserve
         clean_emoji         : if True, convert emojis to the value of "replace_emoji_with"
-        clean_punct         : if True, convert punctuations to the value of "replace_punct_with
         replace_emoji_with  : str to replace emojis with        
         replace_punct_with  : str to replace punctuations with
 
@@ -119,8 +117,6 @@ def clean(
         update_replacement_dictionary(consts.punctuation_marks, replace_punct_with)
     if clean_emoji:
         emoji_dicts.emoji_dict # TODO: compile into a pattern object
-    if clean_punct:
-        print("clean punctuation")
 
     cleaned_text = ''
     for token in text:
@@ -156,7 +152,6 @@ def main():
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
                 #clean_emoji=True,
-                #clean_punct=False,
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))

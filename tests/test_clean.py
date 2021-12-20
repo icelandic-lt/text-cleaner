@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import re
-from text_cleaner import clean
+from text_cleaner import clean, constants
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
@@ -31,24 +31,21 @@ def test_preserve_characters():
 
 def test_clean_html_text():
     ## Audiobooks fall under this category
+    # TODO: html clean feature will enable more complex html cleaning. Currently testing naked html text is possible
     assert clean.clean("<p> einskonar kerfi (e. system) </p>", clean_audiobook=True) == "einskonar kerfi <en> system </en> ."
     assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>") == ",1920. Brynjar,, samhengi í lífinu ,e. sense of koherenke,."
     assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>", clean_audiobook=True) == ",1920. Brynjar,, samhengi í lífinu <en> sense of coherence </en>. ."
-    
 
 def test_clean_punctuation():
     # replace punct set
     assert clean.clean(",.:!?", punct_set=[',','.']) == ",." 
-    # replace punct with
-    #assert clean.clean(".,:!?", replace_punct_with=":") == "::"
 
 def test_helper_functions():
     # tests both 'get_replacement' and 'should_delete' as well
     assert clean.validate_characters("\u010c", []).strip() == "Tj" 
-    assert clean.validate_characters("\u05dc", []).strip() == "" 
+    assert clean.validate_characters("\u05dc", []).strip() == ""
     assert clean.validate_characters("\u03ba", []).strip() == "kappa" 
     assert clean.validate_characters("×", []).strip() == ""
-
     # method tested is subject to change.
     assert clean.clean_foreign_text_occurrence("(e. Hello)") == "<en> Hello </en> "
     assert clean.clean_foreign_text_occurrence("(e. Hello World)") == "<en> Hello World </en> "
@@ -61,6 +58,9 @@ def test_helper_functions():
 
 def test_replace_character():
     ## replacement configurations mutate the state of the cleaner 
+    # replace punctuation
+    assert clean.clean("hello.", replace_punct_with=' world') == "hello world"
+    assert clean.clean("..,,.,.,.,", replace_punct_with='1') == "1111111111"
     # character replace
     assert clean.clean("aábdð", char_to_replace={'a': 'k'}) == "kábdð"
     assert clean.clean("abdð", char_to_replace={'ð': 'eéfghi'}) == "kbdeéfghi"
