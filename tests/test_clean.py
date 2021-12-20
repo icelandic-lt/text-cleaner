@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 import re
 from text_cleaner import clean
 
@@ -25,6 +26,7 @@ def test_preserve_characters():
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz']) == "s zz sss ssss"
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
     assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
+
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
 
 def test_clean_html_text():
