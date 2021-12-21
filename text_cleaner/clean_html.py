@@ -1,15 +1,18 @@
+
 import re
 from bs4 import BeautifulSoup as bs
 from text_cleaner import constants
 
 
 def remove_whitespace_before_punctuation(text):
-    # TODO: regex description
+    # the following regex demarks a string with 1 or more 
+    # whitespaces followed by a punctuation mark
     return re.sub(r'\s+([,.?!])', r'\1', text)
 
 
 def remove_duplicate_punctuation_marks(soup):
-    # TODO: regex description
+    # the following regex demarks a string with 1 punctuation 
+    # mark followed by 1 or more punctuation marks
     return re.sub(r'([,.?!])[,.?!]+', r'\1', soup)
 
 
