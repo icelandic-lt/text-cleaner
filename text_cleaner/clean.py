@@ -87,9 +87,8 @@ def clean(
     alphabet=[],
     punct_set=[],
     clean_emoji=True,
-    clean_punct=False,
     clean_audiobook=False,
-    replace_emoji_with='',  
+    replace_emoji_with='',
     replace_punct_with='',
 ):
 
@@ -105,7 +104,6 @@ def clean(
         alphabet            : list of char that don't need converting     
         punct_set           : list of punctuation marks set to preserve
         clean_emoji         : if True, convert emojis to the value of "replace_emoji_with"
-        clean_punct         : if True, convert punctuations to the value of "replace_punct_with
         replace_emoji_with  : str to replace emojis with        
         replace_punct_with  : str to replace punctuations with
 
@@ -122,24 +120,24 @@ def clean(
     if alphabet:
         consts.character_alphabet = alphabet
     if replace_punct_with:
-        consts.character_alphabet.append(replace_punct_with)
         update_replacement_dictionary(consts.punctuation_marks, replace_punct_with)
     if clean_emoji:
         emoji_dicts.emoji_dict # TODO: compile into a pattern object
-    if clean_punct:
-        print("clean punctuation")
 
     cleaned_text = ''
     for token in text:
-        # compare token with stripped punctuation marks on the off chance
-        # that the punctuation marks are following the preserved token.
-        if token.strip(r',.\?!:') in char_to_preserve:
+        # strip punctuation marks around the token before comparing against the char to 
+        # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
+        if token.strip(r",.\?!:()") in char_to_preserve:
             cleaned_text += token + ' '
+        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
         elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
-            continue # drop it # TODO: possibly merge with below or just replace with a '.' by default
+            continue 
+        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
         elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
-            cleaned_text += '. ' # default value for closing html tags TODO: allow custom value to be set
-        elif token.startswith('(e.') and clean_audiobook: # TODO: only covers english text atm and assumes it's prefixed be "(e."
+            cleaned_text += '. ' 
+        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
+        elif token.startswith('(e.') and clean_audiobook: 
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         else:
@@ -165,7 +163,6 @@ def main():
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
                 #clean_emoji=True,
-                #clean_punct=False,
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))
@@ -173,4 +170,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
