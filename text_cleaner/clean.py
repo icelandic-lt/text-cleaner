@@ -87,7 +87,7 @@ def clean(
     alphabet=[],
     punct_set=[],
     clean_emoji=True,
-    clean_audiobook=False,
+    preserve_foreign_translation=False,
     replace_emoji_with='',
     replace_punct_with='',
 ):
@@ -130,14 +130,8 @@ def clean(
         # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
         if token.strip(r",.\?!:()") in char_to_preserve:
             cleaned_text += token + ' '
-        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
-        elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
-            continue 
-        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
-        elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
-            cleaned_text += '. ' 
         # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
-        elif token.startswith('(e.') and clean_audiobook: 
+        elif token.startswith('(e.') and preserve_foreign_translation:
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         else:
@@ -149,7 +143,7 @@ def clean(
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("text", help="a text to be cleaned")
+    parser.add_argument('text', help="a text to be cleaned")
     args = parser.parse_args()
     
     return args.text
@@ -157,12 +151,13 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    print(clean(text, 
+    print(clean(text,
                 #char_to_preserve=['c'],
                 #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
                 #clean_emoji=True,
+                #preserve_foreign_translation=True,
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))
