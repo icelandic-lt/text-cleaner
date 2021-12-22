@@ -25,7 +25,7 @@ def test_preserve_characters():
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz']) == "s zz sss ssss"
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == "(Zwoozh) er ekki íslenskt orð."
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
     
 def test_clean_html_text():
     ## Audiobooks fall under this category

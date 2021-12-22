@@ -121,7 +121,15 @@ def clean(
     for token in text:
         # strip punctuation marks around the token before comparing against the char to 
         # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
-        if token.strip(r",.\?!:()") in char_to_preserve:
+        
+        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
+        if token.startswith('(e.') and clean_audiobook: 
+            token = clean_foreign_text_occurrence(token)
+            cleaned_text += token
+        elif token.strip(r",.\?!:()") in char_to_preserve:
+            for punct_mark in ['"','(',')']:
+                if punct_mark in token:
+                    token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         # TODO: This get's reworked in an upcoming feature which introduces html_clean()
         elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
@@ -129,10 +137,6 @@ def clean(
         # TODO: This get's reworked in an upcoming feature which introduces html_clean()
         elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
             cleaned_text += '. ' 
-        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
-        elif token.startswith('(e.') and clean_audiobook: 
-            token = clean_foreign_text_occurrence(token)
-            cleaned_text += token
         else:
             cleaned_text += validate_characters(token, char_to_preserve)
 
