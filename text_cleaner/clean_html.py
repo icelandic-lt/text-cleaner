@@ -11,7 +11,7 @@ def remove_whitespace_before_punctuation(text):
     return re.sub(r'\s+([,.?!])', r'\1', text)
 
 
-def remove_duplicate_punctuation_marks(soup):
+def remove_consecutive_punct_marks(soup):
     # the following regex demarks a string with 1 punctuation 
     # mark followed by 1 or more punctuation marks
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', soup)
@@ -94,7 +94,7 @@ def clean_html(
 
 
     text = remove_whitespace_before_punctuation(text)
-    text = remove_duplicate_punctuation_marks(text)
+    text = remove_consecutive_punct_marks(text)
 
     if write_to_file:
         f = open(write_to_file, "a")    
