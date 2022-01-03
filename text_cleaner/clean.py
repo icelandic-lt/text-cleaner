@@ -59,7 +59,7 @@ def validate_characters(token, char_to_preserve):
             if replacement:
                 token = token.replace(char, replacement)
             elif (char == '(' or char == ')' or char == '"'):
-                token = token.replace(char, ",")
+                token = token.replace(char, " , ")
             elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
                 token = token.replace(char, ' ')
 

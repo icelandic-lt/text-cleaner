@@ -8,7 +8,7 @@ def test_default_clean():
     assert clean.clean("📌 red pin") == "red pin"
     assert clean.clean("ß Ø") == "ss Ö"
     assert clean.clean("<p> HTML tög </p>") == "HTML tög"
-    assert clean.clean("raki (e. humidity)") == "raki ,e. humidity,"
+    assert clean.clean("raki (e. humidity)") == "raki , e. humidity ,"
     assert clean.clean("123") == "123"
 
 def test_preserve_characters():
@@ -31,8 +31,8 @@ def test_clean_html_text():
     ## Audiobooks fall under this category
     # TODO: html clean feature will enable more complex html cleaning. Currently testing naked html text is possible
     assert clean.clean("<p> einskonar kerfi (e. system) </p>", clean_audiobook=True) == "einskonar kerfi <en> system </en> ."
-    assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>") == ",1920. Brynjar,, samhengi í lífinu ,e. sense of koherenke,."
-    assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>", clean_audiobook=True) == ",1920. Brynjar,, samhengi í lífinu <en> sense of coherence </en>. ."
+    assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>") == ", 1920. Brynjar , , samhengi í lífinu , e. sense of koherenke , ."
+    assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>", clean_audiobook=True) == ", 1920. Brynjar , , samhengi í lífinu <en> sense of coherence </en>. ."
 
 def test_clean_punctuation():
     # replace punct set
@@ -49,8 +49,8 @@ def test_helper_functions():
     assert clean.clean_foreign_text_occurrence("(e. Hello World)") == "<en> Hello World </en> "
     assert clean.clean_foreign_text_occurrence("(e. kwartz)") == "<en> kwartz </en> "
     # tests 'get_ice_alpha_replacement' as well
-    assert clean.validate_characters("(\")", []).strip() == ",,,"
-    assert clean.validate_characters("())(\"", [")", "\""]).strip() == ",)),\""
+    assert clean.validate_characters("(\")", []).strip() == ",  ,  ,"
+    assert clean.validate_characters("())(\"", [")", "\""]).strip() == ", )) , \""
     assert clean.validate_characters("cwartz", []).strip() == "kvarts"
     assert clean.validate_characters("123", []).strip() == "123"
 
