@@ -25,8 +25,6 @@ def clean_html_tables(soup):
     """
     Organizes text in tables by prepending a header for each cell in it's 
     column and finally removes the rows containing only headers.
-    
-    This is so headers are read each time by TTS engines before the cell's content.
     """
     tables = soup.find_all('table')
 
@@ -47,10 +45,13 @@ def clean_html_tables(soup):
 
 
 def append_punctuation_to_tag_content(text, html_tag_to_punctuation_mark):    
+    """
+    Appends characters to html tags found in input dictionary to beautifulsoup element tag (text). 
+    """
+    print(type(text))
     for tag in html_tag_to_punctuation_mark:
         for text_within_tag in text.find_all(tag):
             text_within_tag.append(html_tag_to_punctuation_mark[tag])
-
     return text
 
 
@@ -64,7 +65,7 @@ def extract_html_from_file(html_doc, extract_from_div):
 
 def clean_html(
     html_doc,
-    html_tag_to_punctuation_mark={},
+    replace_html_closing_tag_with={},
     content_parent_div={},
     write_to_file='',
 ):
@@ -73,10 +74,10 @@ def clean_html(
     specified by input, by removing and replacing html tags based on dictionary input.
     
     Args:
-        html_doc                : html document to extract from
-        html_tag_replacement    : dictionary of html tags to be convert 
-        write_to_file           : name of output file
-        content_parent_div      : the parent div of all the content to be cleaned
+        html_doc                        : html document to extract from
+        replace_html_closing_tag_with   : dictionary of html tags to be convert 
+        write_to_file                   : name of output file
+        content_parent_div              : the parent div of all the content to be cleaned
 
     Returns:
         str: the input html document stripped of html tags
@@ -88,9 +89,8 @@ def clean_html(
 
     html_soup = extract_html_from_file(html_doc, extract_from_div=content_parent_div)
 
-    html_soup = append_punctuation_to_tag_content(html_soup, html_tag_to_punctuation_mark)
+    html_soup = append_punctuation_to_tag_content(html_soup, replace_html_closing_tag_with)
     text = html_soup.get_text()
-
 
 
     text = remove_whitespace_before_punctuation(text)
@@ -120,7 +120,7 @@ def main():
     print(
         clean_html(
             html_doc='html_snip.html',
-            html_tag_to_punctuation_mark=dictionary,
+            replace_html_closing_tag_with=dictionary,
             content_parent_div={"class": "content-text"},
             write_to_file='cleaned_html_text.txt'
         ))
