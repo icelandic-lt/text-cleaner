@@ -6,6 +6,7 @@ from text_cleaner import emoji_dictionary as emoji_dicts
 
 EMOJI_PATTERN = "\U0001f469|\u2764" # Temporary for testing TODO: Find a list with extensive coverage of emojis    
 
+
 def update_replacement_dictionary(char_to_replace, replacement):
     """
     Adds the input char_to_replace to the collection of (character replacement) 
@@ -17,6 +18,7 @@ def update_replacement_dictionary(char_to_replace, replacement):
 
     umaps.replacement_dictionary.update(dict)
 
+
 def get_ice_alpha_replacement(char):
     if char in umaps.post_dict_lookup:
         for lookup_char in umaps.post_dict_lookup[char].lower():
@@ -26,12 +28,15 @@ def get_ice_alpha_replacement(char):
         return umaps.post_dict_lookup[char]
     return ''
 
+
 def get_replacement(char):
     if char in umaps.replacement_dictionary:
         return umaps.replacement_dictionary[char]
 
+
 def should_delete(char):
     return char in umaps.delete_chars_map
+
 
 def clean_foreign_text_occurrence(token):
     token = token.replace("(e.", "<en>") # TODO: placeholder
@@ -65,13 +70,15 @@ def validate_characters(token, char_to_preserve):
 
     return token + ' '
 
+
 def text_to_tokens(text):
     """
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
     simplify the cleaning process.
     """
     # the following regex demarks a string within parentheses (opening and closing parenthesis) 
-    return re.split(r"\s(?![^(]*\))", text)
+    return re.split(r'\s(?![^(]*\))', text)
+
 
 def clean(
     text,
@@ -80,7 +87,7 @@ def clean(
     alphabet=[],
     punct_set=[],
     clean_emoji=True,
-    clean_audiobook=False,
+    preserve_foreign_translation=False,
     replace_emoji_with='',
     replace_punct_with='',
 ):
@@ -123,7 +130,7 @@ def clean(
         # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
         
         # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
-        if token.startswith('(e.') and clean_audiobook: 
+        if token.startswith('(e.') and preserve_foreign_translation: 
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         elif token.strip(r",.\?!:()") in char_to_preserve:
@@ -131,36 +138,38 @@ def clean(
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
-        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
-        elif token in consts.HTML_TAGS or token in consts.HTML_CLOSING_TAGS and not clean_audiobook:
-            continue 
-        # TODO: This get's reworked in an upcoming feature which introduces html_clean()
-        elif token in consts.HTML_CLOSING_TAGS and clean_audiobook:
-            cleaned_text += '. ' 
+        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
+        elif token.startswith('(e.') and preserve_foreign_translation:
+            token = clean_foreign_text_occurrence(token)
+            cleaned_text += token
         else:
             cleaned_text += validate_characters(token, char_to_preserve)
 
-    cleaned_text = re.sub(r"\s+", " ", cleaned_text)
+    cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("text", help="a text to be cleaned")
+    parser.add_argument('text', help="a text to be cleaned")
     args = parser.parse_args()
     
     return args.text
 
+
 def main():
     text = parse_arguments()
-    print(clean(text, 
+    print(clean(text,
                 #char_to_preserve=['c'],
                 #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
                 #clean_emoji=True,
+                #preserve_foreign_translation=True,
                 #replace_emoji_with="<emoji>",
                 #replace_punct_with="  <punctuation>  ",
                 ))
+
 
 if __name__ == '__main__':
     main()
