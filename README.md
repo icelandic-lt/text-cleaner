@@ -43,13 +43,13 @@ cleaned_text = clean(
 )
 
 # basic example, no usage of arguments.
->>> print(clean("π á æfmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins."))
-"pí á afmæli í dag, bubbi söng . afmælissönginn í tilefni dagsins."
+>>> print(clean("π á afmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins."))
+"pí á afmæli í dag, Bubbi söng . afmælissönginn í tilefni dagsins."
 
 # we can convert emojis to any string, also configure which characters are "off limits".
->>> print(clean("π á æfmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins.", 
+>>> print(clean("π á afmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins.", 
             replace_emoji_with=":emójí:", char_to_preserve=['π', 'ø'])
-"π á afmæli í dag, bubbi söng :emójí: afmælissønginn í tilefni dagsins."
+"π á afmæli í dag, Bubbi söng :emójí: afmælissønginn í tilefni dagsins."
 
 # we can define what punctuation marks we want to keep, also if we want emojis to be preserved.
 >>> print(clean("sem dæmi: ekki hlaupa á ganginum! hrópa 😱 mamma, amma og pabbi öll í kór.", 

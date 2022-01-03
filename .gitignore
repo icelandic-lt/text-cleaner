@@ -1,4 +1,14 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 
-# vscode project specific settings
+# Unit test / coverage reports
+.coverage
+
+# Distribution / packaging
+bin/
+build/
+dist/
+*.egg-info/
+
+# Vscode project specific settings
 .vscode 
