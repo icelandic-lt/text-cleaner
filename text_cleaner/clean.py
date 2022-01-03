@@ -64,7 +64,7 @@ def validate_characters(token, char_to_preserve):
             if replacement:
                 token = token.replace(char, replacement)
             elif (char == '(' or char == ')' or char == '"'):
-                token = token.replace(char, ",")
+                token = token.replace(char, " , ")
             elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
                 token = token.replace(char, ' ')
 
@@ -128,7 +128,15 @@ def clean(
     for token in text:
         # strip punctuation marks around the token before comparing against the char to 
         # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
-        if token.strip(r",.\?!:()") in char_to_preserve:
+        
+        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
+        if token.startswith('(e.') and preserve_foreign_translation: 
+            token = clean_foreign_text_occurrence(token)
+            cleaned_text += token
+        elif token.strip(r",.\?!:()") in char_to_preserve:
+            for punct_mark in ['"','(',')']:
+                if punct_mark in token:
+                    token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
         elif token.startswith('(e.') and preserve_foreign_translation:

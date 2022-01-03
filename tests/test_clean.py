@@ -7,8 +7,8 @@ def test_default_clean():
     assert clean.clean("we strip all 😎 emojis 😎") == "ve strip all emojis"
     assert clean.clean("📌 red pin") == "red pin"
     assert clean.clean("ß Ø") == "ss Ö"
-    assert clean.clean("<p> HTML tög </p>") == "p HTML tög p"
-    assert clean.clean("raki (e. humidity)") == "raki ,e. humidity,"
+    assert clean.clean("<p> HTML tög </p>") == "HTML tög"
+    assert clean.clean("raki (e. humidity)") == "raki , e. humidity ,"
     assert clean.clean("123") == "123"
 
 def test_preserve_characters():
@@ -25,7 +25,7 @@ def test_preserve_characters():
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz']) == "s zz sss ssss"
     assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == "(Zwoozh) er ekki íslenskt orð."
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
     
 def test_clean_punctuation():
     # replace punct set
@@ -42,8 +42,8 @@ def test_helper_functions():
     assert clean.clean_foreign_text_occurrence("(e. Hello World)") == "<en> Hello World </en> "
     assert clean.clean_foreign_text_occurrence("(e. kwartz)") == "<en> kwartz </en> "
     # tests 'get_ice_alpha_replacement' as well
-    assert clean.validate_characters("(\")", []).strip() == ",,,"
-    assert clean.validate_characters("())(\"", [")", "\""]).strip() == ",)),\""
+    assert clean.validate_characters("(\")", []).strip() == ",  ,  ,"
+    assert clean.validate_characters("())(\"", [")", "\""]).strip() == ", )) , \""
     assert clean.validate_characters("cwartz", []).strip() == "kvarts"
     assert clean.validate_characters("123", []).strip() == "123"
 
