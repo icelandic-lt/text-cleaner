@@ -27,13 +27,6 @@ def test_preserve_characters():
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
     assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == "(Zwoozh) er ekki íslenskt orð."
     
-# def test_clean_html_text():
-#     ## Audiobooks fall under this category
-#     # TODO: html clean feature will enable more complex html cleaning. Currently testing naked html text is possible
-#     assert clean.clean("<p> einskonar kerfi (e. system) </p>", clean_audiobook=True) == "einskonar kerfi <en> system </en> ."
-#     assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>") == ",1920. Brynjar,, samhengi í lífinu ,e. sense of koherenke,."
-#     assert clean.clean("<p> (1920. Brynjar), samhengi í lífinu (e. sense of coherence). </p>", clean_audiobook=True) == ",1920. Brynjar,, samhengi í lífinu <en> sense of coherence </en>. ."
-
 def test_clean_punctuation():
     # replace punct set
     assert clean.clean(",.:!?", punct_set=[',','.']) == ",." 
