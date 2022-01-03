@@ -7,7 +7,7 @@ def test_default_clean():
     assert clean.clean("we strip all 😎 emojis 😎") == "ve strip all emojis"
     assert clean.clean("📌 red pin") == "red pin"
     assert clean.clean("ß Ø") == "ss Ö"
-    assert clean.clean("<p> HTML tög </p>") == "HTML tög"
+    assert clean.clean("<p> HTML tög </p>") == "p HTML tög p"
     assert clean.clean("raki (e. humidity)") == "raki , e. humidity ,"
     assert clean.clean("123") == "123"
 
