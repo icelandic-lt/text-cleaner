@@ -138,10 +138,6 @@ def clean(
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
-        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
-        elif token.startswith('(e.') and preserve_foreign_translation:
-            token = clean_foreign_text_occurrence(token)
-            cleaned_text += token
         else:
             cleaned_text += validate_characters(token, char_to_preserve)
 
