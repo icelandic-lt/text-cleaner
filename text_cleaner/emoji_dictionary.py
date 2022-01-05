@@ -6,7 +6,7 @@
 """
 
 
-emoji_dict = {
+EMOJI_PATTERN = {
     "\U0001F600": "grinning face",
     "\U0001F603": "grinning face with big eyes",
     "\U0001F604": "grinning face with smiling eyes",
