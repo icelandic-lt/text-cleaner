@@ -2,10 +2,7 @@ import argparse
 import re
 from text_cleaner import unicode_maps as umaps
 from text_cleaner import constants as consts
-from text_cleaner import emoji_dictionary as emoji_dicts
-
-EMOJI_PATTERN = "\U0001f469|\u2764" # Temporary for testing TODO: Find a list with extensive coverage of emojis    
-
+from text_cleaner import emoji_dictionary 
 
 def update_replacement_dictionary(char_to_replace, replacement):
     """
@@ -21,12 +18,21 @@ def update_replacement_dictionary(char_to_replace, replacement):
 
 def get_ice_alpha_replacement(char):
     if char in umaps.post_dict_lookup:
-        for lookup_char in umaps.post_dict_lookup[char].lower():
+        # make sure the value returned by post_dict_lookup contains allowed characters
+        for lookup_char in umaps.post_dict_lookup[char].lower(): 
             if lookup_char not in consts.character_alphabet:
                 return ''
-        
+
         return umaps.post_dict_lookup[char]
     return ''
+
+
+def replace_emojis(text, emoji_replacement, char_to_preserve):
+    for emoji in emoji_dictionary.EMOJI_PATTERN:
+        if emoji in text and emoji not in char_to_preserve:
+            text = text.replace(emoji, emoji_replacement)
+
+    return text
 
 
 def get_replacement(char):
@@ -41,25 +47,31 @@ def should_delete(char):
 def clean_foreign_text_occurrence(token):
     token = token.replace("(e.", "<en>") # TODO: placeholder
     token = token.replace(")", " </en>")
+
     return token + ' '
 
 
-def validate_characters(token, char_to_preserve):
+def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji):
     """
     Checks each character of the input word (token) to see if it matches any predefined character, as defined
     in constants or the second input 'char_to_preserve'.
     """
+
     for _, char in enumerate(token):
         repl = get_replacement(char)
         if repl:
             token = token.replace(char, repl)
         elif should_delete(char):
             token = token.replace(char, '')
-        elif char in char_to_preserve:
+        elif char in char_to_preserve or char.isdigit():
             continue
-        elif char.isdigit(): 
-            continue
+        elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emoji:
+            if clean_emoji:
+                char = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
+            elif preserve_emoji:
+                continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks: 
+            # TODO: throw in a function for reduced complexity
             replacement = get_ice_alpha_replacement(char)
             if replacement:
                 token = token.replace(char, replacement)
@@ -86,10 +98,11 @@ def clean(
     char_to_replace={},
     alphabet=[],
     punct_set=[],
-    clean_emoji=True,
+    preserve_emoji=False,
+    clean_emoji=False,
     preserve_foreign_translation=False,
-    replace_emoji_with='',
-    replace_punct_with='',
+    emoji_replacement='.',
+    punct_replacement='',
 ):
 
     """
@@ -103,33 +116,31 @@ def clean(
         char_to_replace     : dictionary of characters to convert     
         alphabet            : list of char that don't need converting     
         punct_set           : list of punctuation marks set to preserve
-        clean_emoji         : if True, convert emojis to the value of "replace_emoji_with"
-        replace_emoji_with  : str to replace emojis with        
-        replace_punct_with  : str to replace punctuations with
+        preserve_emoji      : if True, we preserve emojis
+        clean_emoji         : if True, we convert emojis to their corresponding text description 
+        emoji_replacement   : str to replace emojis with        
+        punct_replacement   : str to replace punctuations with
 
     Returns:
         str: cleaned text based on function args
     """
-
-    text = text_to_tokens(text)
     
+    if emoji_replacement and not clean_emoji and not preserve_emoji:
+        text = replace_emojis(text, emoji_replacement, char_to_preserve)
     if char_to_replace:
         umaps.replacement_dictionary.update(char_to_replace)
     if punct_set:
         consts.punctuation_marks = punct_set
     if alphabet:
         consts.character_alphabet = alphabet
-    if replace_punct_with:
-        update_replacement_dictionary(consts.punctuation_marks, replace_punct_with)
-    if clean_emoji:
-        emoji_dicts.emoji_dict # TODO: compile into a pattern object
+    if punct_replacement:
+        update_replacement_dictionary(consts.punctuation_marks, punct_replacement)
+    
+    text = text_to_tokens(text)
 
     cleaned_text = ''
     for token in text:
-        # strip punctuation marks around the token before comparing against the char to 
-        # preserve on the off chance that it's prefixed or followed by a punctuation mark. 
-        
-        # TODO: only covers english text atm and assumes it's prefixed be "(e." as is by convention
+        # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
         if token.startswith('(e.') and preserve_foreign_translation: 
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
@@ -139,7 +150,7 @@ def clean(
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         else:
-            cleaned_text += validate_characters(token, char_to_preserve)
+            cleaned_text += validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
@@ -160,10 +171,11 @@ def main():
                 #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
-                #clean_emoji=True,
+                # preserve_emoji=True,
+                # clean_emoji=True,
                 #preserve_foreign_translation=True,
-                #replace_emoji_with="<emoji>",
-                #replace_punct_with="  <punctuation>  ",
+                #emoji_replacement="<emoji>",
+                #punct_replacement="  <punctuation>  ",
                 ))
 
 

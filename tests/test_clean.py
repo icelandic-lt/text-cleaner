@@ -4,8 +4,8 @@ from text_cleaner import clean, constants
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
-    assert clean.clean("we strip all 😎 emojis 😎") == "ve strip all emojis"
-    assert clean.clean("📌 red pin") == "red pin"
+    assert clean.clean("we convert all 😎 emojis 😎 to .") == "ve konvert all . emojis . to ."
+    assert clean.clean("📌 red pin") == ". red pin"
     assert clean.clean("ß Ø") == "ss Ö"
     assert clean.clean("<p> HTML tög </p>") == "p HTML tög p"
     assert clean.clean("raki (e. humidity)") == "raki , e. humidity ,"
@@ -14,7 +14,9 @@ def test_default_clean():
 def test_preserve_characters():
     assert clean.clean("π námundast í 3.14", char_to_preserve=['π']) == "π námundast í 3.14"
     assert clean.clean("ß Ø", char_to_preserve=['ß']) == "ß Ö"
-    assert clean.clean("🤡😎🔥📌", char_to_preserve=['🤡','😎']) == "🤡😎"
+    assert clean.clean("🤡😎🔥📌", char_to_preserve=['🤡','😎'], emoji_replacement='') == "🤡😎"
+    assert clean.clean("german 🐍: ßßß", preserve_emoji=True) == "german 🐍: ßßß"
+    assert clean.clean("a 🧹 is used to play quidditch", clean_emoji=True) == "a 🧹 is used to play kuidditkh"
     assert clean.clean("∫∬∭∮∯∰∱∲∳", char_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
     assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
     #  characters stored in unicode_maps
@@ -33,26 +35,26 @@ def test_clean_punctuation():
 
 def test_helper_functions():
     # tests both 'get_replacement' and 'should_delete' as well
-    assert clean.validate_characters("\u010c", []).strip() == "Tj" 
-    assert clean.validate_characters("\u05dc", []).strip() == ""
-    assert clean.validate_characters("\u03ba", []).strip() == "kappa" 
-    assert clean.validate_characters("×", []).strip() == ""
+    assert clean.validate_characters("\u010c", [], False, False).strip() == "Tj" 
+    assert clean.validate_characters("\u05dc", [], False, False).strip() == ""
+    assert clean.validate_characters("\u03ba", [], False, False).strip() == "kappa" 
+    assert clean.validate_characters("×", [], False, False).strip() == ""
     # method tested is subject to change.
     assert clean.clean_foreign_text_occurrence("(e. Hello)") == "<en> Hello </en> "
     assert clean.clean_foreign_text_occurrence("(e. Hello World)") == "<en> Hello World </en> "
     assert clean.clean_foreign_text_occurrence("(e. kwartz)") == "<en> kwartz </en> "
     # tests 'get_ice_alpha_replacement' as well
-    assert clean.validate_characters("(\")", []).strip() == ",  ,  ,"
-    assert clean.validate_characters("())(\"", [")", "\""]).strip() == ", )) , \""
-    assert clean.validate_characters("cwartz", []).strip() == "kvarts"
-    assert clean.validate_characters("123", []).strip() == "123"
+    assert clean.validate_characters("(\")", [], False, False).strip() == ",  ,  ,"
+    assert clean.validate_characters("())(\"", [")", "\""], False, False).strip() == ", )) , \""
+    assert clean.validate_characters("cwartz", [], False, False).strip() == "kvarts"
+    assert clean.validate_characters("123", [], False, False).strip() == "123"
 
 def test_replace_character():
     ## replacement configurations mutate the state of the cleaner 
     # replace punctuation
-    assert clean.clean("hello.", replace_punct_with=' world') == "hello world"
-    assert clean.clean("..,,.,.,.,", replace_punct_with='1') == "1111111111"
-    assert clean.clean(".", replace_punct_with='\u03ae') == "\u03ae"
+    assert clean.clean("hello.", punct_replacement=' world') == "hello world"
+    assert clean.clean("..,,.,.,.,", punct_replacement='1') == "1111111111"
+    assert clean.clean(".", punct_replacement='\u03ae') == "\u03ae"
     # character replace
     assert clean.clean("aábdð", char_to_replace={'a': 'k'}) == "kábdð"
     assert clean.clean("abdð", char_to_replace={'ð': 'eéfghi'}) == "kbdeéfghi"
