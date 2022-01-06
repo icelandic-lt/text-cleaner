@@ -16,6 +16,18 @@ def update_replacement_dictionary(char_to_replace, replacement) -> None:
     umaps.replacement_dictionary.update(dict)
 
 
+def replace_or_drop(char, token) -> str:
+    replacement = get_ice_alpha_replacement(char)
+    if replacement:
+        token = token.replace(char, replacement)
+    elif (char == '(' or char == ')' or char == '"'):
+        token =  token.replace(char, " , ")
+    elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
+        token = token.replace(char, ' ')
+    
+    return token
+
+
 def get_ice_alpha_replacement(char) -> str:
     if char in umaps.post_dict_lookup:
         # make sure the value returned by post_dict_lookup contains allowed characters
@@ -45,10 +57,19 @@ def should_delete(char) -> str:
 
 
 def clean_foreign_text_occurrence(token) -> str:
-    token = token.replace("(e.", "<en>") # TODO: placeholder
+    token = token.replace("(e.", "<en>") # Subject to change
     token = token.replace(")", " </en>")
 
     return token + ' '
+
+
+def text_to_tokens(text) -> list:
+    """
+    Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
+    simplify the cleaning process.
+    """
+    # the following regex demarks a string within parentheses (opening and closing parenthesis) 
+    return re.split(r'\s(?![^(]*\))', text)
 
 
 def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) -> str:
@@ -70,26 +91,10 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) ->
                 char = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
             elif preserve_emoji:
                 continue
-        elif char.lower() not in consts.character_alphabet and consts.punctuation_marks: 
-            # TODO: throw in a function for reduced complexity
-            replacement = get_ice_alpha_replacement(char)
-            if replacement:
-                token = token.replace(char, replacement)
-            elif (char == '(' or char == ')' or char == '"'):
-                token = token.replace(char, " , ")
-            elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
-                token = token.replace(char, ' ')
+        elif char.lower() not in consts.character_alphabet and consts.punctuation_marks:
+            token = replace_or_drop(char, token)
 
     return token + ' '
-
-
-def text_to_tokens(text) -> list:
-    """
-    Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
-    simplify the cleaning process.
-    """
-    # the following regex demarks a string within parentheses (opening and closing parenthesis) 
-    return re.split(r'\s(?![^(]*\))', text)
 
 
 def clean(
@@ -109,7 +114,8 @@ def clean(
     Process (clean) the raw input text for NLP (Natural Language Processing) by removing 
     unhelpful and unusable data, as well as reducing noise.
     
-    Text cleaning is task specific so multiple configurations are available.
+    Text cleaning is task specific so multiple configurations are made available.
+
     Args:
         text                : raw text for cleaning                       
         char_to_preserve    : list of char types forbidden to strip or convert
@@ -121,8 +127,6 @@ def clean(
         emoji_replacement   : str to replace emojis with        
         punct_replacement   : str to replace punctuations with
 
-    Returns:
-        str: cleaned text based on function args
     """
     
     if emoji_replacement and not clean_emoji and not preserve_emoji:

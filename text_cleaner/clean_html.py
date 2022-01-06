@@ -81,16 +81,12 @@ def clean_html(
         write_to_file                   : name of output file
         content_parent_div              : the parent div of all the content to be cleaned
 
-    Returns:
-        str: the input html document stripped of html tags
     """
 
 
-    # WIP - Read description for method
-    # soup = clean_html_tables(soup)
-
     html_soup = extract_html_from_file(html_doc, extract_from_div=content_parent_div)
 
+    html_soup = clean_html_tables(html_soup)
     html_soup = append_punctuation_to_tag_content(html_soup, replace_html_closing_tag_with)
     text = html_soup.get_text()
 
@@ -110,7 +106,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('file', type=argparse.FileType('r'), help="html file to be extracted")
     args = parser.parse_args()
-    
+
     return args
 
 
