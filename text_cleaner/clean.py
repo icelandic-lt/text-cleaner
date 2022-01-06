@@ -4,7 +4,7 @@ from text_cleaner import unicode_maps as umaps
 from text_cleaner import constants as consts
 from text_cleaner import emoji_dictionary 
 
-def update_replacement_dictionary(char_to_replace, replacement):
+def update_replacement_dictionary(char_to_replace, replacement) -> None:
     """
     Adds the input char_to_replace to the collection of (character replacement) 
     dictionaries, as defined in unicode_maps.
@@ -16,7 +16,7 @@ def update_replacement_dictionary(char_to_replace, replacement):
     umaps.replacement_dictionary.update(dict)
 
 
-def get_ice_alpha_replacement(char):
+def get_ice_alpha_replacement(char) -> str:
     if char in umaps.post_dict_lookup:
         # make sure the value returned by post_dict_lookup contains allowed characters
         for lookup_char in umaps.post_dict_lookup[char].lower(): 
@@ -27,7 +27,7 @@ def get_ice_alpha_replacement(char):
     return ''
 
 
-def replace_emojis(text, emoji_replacement, char_to_preserve):
+def replace_emojis(text, emoji_replacement, char_to_preserve) -> str:
     for emoji in emoji_dictionary.EMOJI_PATTERN:
         if emoji in text and emoji not in char_to_preserve:
             text = text.replace(emoji, emoji_replacement)
@@ -35,23 +35,23 @@ def replace_emojis(text, emoji_replacement, char_to_preserve):
     return text
 
 
-def get_replacement(char):
+def get_replacement(char) -> str:
     if char in umaps.replacement_dictionary:
         return umaps.replacement_dictionary[char]
 
 
-def should_delete(char):
+def should_delete(char) -> str:
     return char in umaps.delete_chars_map
 
 
-def clean_foreign_text_occurrence(token):
+def clean_foreign_text_occurrence(token) -> str:
     token = token.replace("(e.", "<en>") # TODO: placeholder
     token = token.replace(")", " </en>")
 
     return token + ' '
 
 
-def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji):
+def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) -> str:
     """
     Checks each character of the input word (token) to see if it matches any predefined character, as defined
     in constants or the second input 'char_to_preserve'.
@@ -83,7 +83,7 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji):
     return token + ' '
 
 
-def text_to_tokens(text):
+def text_to_tokens(text) -> list:
     """
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
     simplify the cleaning process.
@@ -103,7 +103,7 @@ def clean(
     preserve_foreign_translation=False,
     emoji_replacement='.',
     punct_replacement='',
-):
+) -> str:
 
     """
     Process (clean) the raw input text for NLP (Natural Language Processing) by removing 
