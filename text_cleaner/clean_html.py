@@ -110,12 +110,12 @@ def main():
         dictionary[element] = '. '
 
     print(
-    clean_html(
-        html_doc='hljóðbók.html',
-        replace_html_closing_tag_with=dictionary,
-        content_parent_div={"class": "content-text"},
-        write_to_file='cleaned_html_text.txt'
-    ))
+        clean_html(
+            html_doc='html_snip.html',
+            replace_html_closing_tag_with=dictionary,
+            content_parent_div={"class": "content-text"},
+            write_to_file='cleaned_html_text.txt'
+        ))
 
 
 if __name__ == '__main__':
