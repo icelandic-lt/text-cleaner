@@ -29,7 +29,7 @@ def clean_html_tables(soup) -> element.Tag:
         table_row = table.find_all('tr')
         # used by each cell to reference it's header content
         table_headers = table.find_all('th')
-        
+
         for _, row, in enumerate(table_row):
             # list of cells for current row
             table_cell = row.find_all('td') 
@@ -109,14 +109,13 @@ def main():
     for element in constants.HTML_ELEMENTS: # convenient while developing this html cleaner
         dictionary[element] = '. '
 
-    # print(
+    print(
     clean_html(
         html_doc='hljóðbók.html',
         replace_html_closing_tag_with=dictionary,
         content_parent_div={"class": "content-text"},
         write_to_file='cleaned_html_text.txt'
-    )
-    # )
+    ))
 
 
 if __name__ == '__main__':
