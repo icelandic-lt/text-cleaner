@@ -57,8 +57,8 @@ def should_delete(char) -> str:
 
 
 def clean_foreign_text_occurrence(token) -> str:
-    token = token.replace("(e.", "<en>") # Subject to change
-    token = token.replace(")", " </en>")
+    token = token.replace("(e.", '<lang xml:lang="en-GB">') # SSML standard 
+    token = token.replace(")", " </lang>")
 
     return token + ' '
 

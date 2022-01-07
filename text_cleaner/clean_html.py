@@ -17,14 +17,11 @@ def remove_consecutive_punct_marks(soup) -> str:
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', soup)
 
 
-# TODO: Incomplete.
-# Currently this method only works for tables with the same amount of rows & columns
-# Also the headers are currently appended to all rows (even those before), this will become
-# problematic if a table with that description is in the html document.
 def clean_html_tables(soup) -> element.Tag:
     """
-    Organizes text in tables by prepending a header for each cell in it's 
-    column and finally removes the rows containing only headers.
+    Organizes text in tables to a more readable form for a TTS engine.
+    This function does so by prepending a table header to each data cell 
+    in the same column and removes all original headers.
     """
     tables = soup.find_all('table')
 
@@ -32,17 +29,18 @@ def clean_html_tables(soup) -> element.Tag:
         table_row = table.find_all('tr')
         # used by each cell to reference it's header content
         table_headers = table.find_all('th')
-
+        
         for _, row, in enumerate(table_row):
             # list of cells for current row
             table_cell = row.find_all('td') 
             for idx2, cell in enumerate(table_cell):
-                cell = cell.insert_before(table_headers[idx2].get_text())
+                if idx2 < len(table_headers):
+                    cell = cell.insert_before(table_headers[idx2].get_text() + ': ')
 
-        # remove headers after they've been prepended to each cell in their shared table
+        # remove headers after they've been prepended to each cell in their column
         for th in table_headers:
             th.decompose()
-
+        
     return soup
 
 
@@ -80,17 +78,13 @@ def clean_html(
         replace_html_closing_tag_with   : dictionary of html tags to be convert 
         write_to_file                   : name of output file
         content_parent_div              : the parent div of all the content to be cleaned
-
     """
 
-
-    html_soup = extract_html_from_file(html_doc, extract_from_div=content_parent_div)
-
+    html_soup = extract_html_from_file(html_doc, content_parent_div)
     html_soup = clean_html_tables(html_soup)
     html_soup = append_punctuation_to_tag_content(html_soup, replace_html_closing_tag_with)
+    
     text = html_soup.get_text()
-
-
     text = remove_whitespace_before_punctuation(text)
     text = remove_consecutive_punct_marks(text)
 
@@ -115,13 +109,14 @@ def main():
     for element in constants.HTML_ELEMENTS: # convenient while developing this html cleaner
         dictionary[element] = '. '
 
-    print(
-        clean_html(
-            html_doc='html_snip.html',
-            replace_html_closing_tag_with=dictionary,
-            content_parent_div={"class": "content-text"},
-            write_to_file='cleaned_html_text.txt'
-        ))
+    # print(
+    clean_html(
+        html_doc='hljóðbók.html',
+        replace_html_closing_tag_with=dictionary,
+        content_parent_div={"class": "content-text"},
+        write_to_file='cleaned_html_text.txt'
+    )
+    # )
 
 
 if __name__ == '__main__':
