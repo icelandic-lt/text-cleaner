@@ -40,9 +40,9 @@ def test_helper_functions():
     assert clean.validate_characters("\u03ba", [], False, False).strip() == "kappa" 
     assert clean.validate_characters("×", [], False, False).strip() == ""
     # method tested is subject to change.
-    assert clean.clean_foreign_text_occurrence("(e. Hello)") == "<en> Hello </en> "
-    assert clean.clean_foreign_text_occurrence("(e. Hello World)") == "<en> Hello World </en> "
-    assert clean.clean_foreign_text_occurrence("(e. kwartz)") == "<en> kwartz </en> "
+    assert clean.clean_foreign_text_occurrence("(e. Hello)") == '<lang xml:lang="en-GB"> Hello </lang> '
+    assert clean.clean_foreign_text_occurrence("(e. Hello World)") == '<lang xml:lang="en-GB"> Hello World </lang> '
+    assert clean.clean_foreign_text_occurrence("(e. kwartz)") == '<lang xml:lang="en-GB"> kwartz </lang> '
     # tests 'get_ice_alpha_replacement' as well
     assert clean.validate_characters("(\")", [], False, False).strip() == ",  ,  ,"
     assert clean.validate_characters("())(\"", [")", "\""], False, False).strip() == ", )) , \""
