@@ -105,7 +105,7 @@ def clean(
     punct_set=[],
     preserve_emoji=False,
     clean_emoji=False,
-    preserve_foreign_translation=False,
+    preserve_foreign=False,
     emoji_replacement='.',
     punct_replacement='',
 ) -> str:
@@ -117,15 +117,16 @@ def clean(
     Text cleaning is task specific so multiple configurations are made available.
 
     Args:
-        text                : raw text for cleaning                       
-        char_to_preserve    : list of char types forbidden to strip or convert
-        char_to_replace     : dictionary of characters to convert     
-        alphabet            : list of char that don't need converting     
-        punct_set           : list of punctuation marks set to preserve
-        preserve_emoji      : if True, we preserve emojis
-        clean_emoji         : if True, we convert emojis to their corresponding text description 
-        emoji_replacement   : str to replace emojis with        
-        punct_replacement   : str to replace punctuations with
+        text                  : raw text for cleaning                       
+        char_to_preserve      : list of char types forbidden to strip or convert
+        char_to_replace       : dictionary of characters to convert     
+        alphabet              : list of char that don't need converting     
+        punct_set             : list of punctuation marks set to preserve
+        preserve_emoji        : if True, we preserve emojis
+        clean_emoji           : if True, we convert emojis to their corresponding text description 
+        preserve_foreign      : if True, we preserve foreign translations that are prefixed with '(e.'
+        emoji_replacement     : str to replace emojis with        
+        punct_replacement     : str to replace punctuations with
 
     """
     
@@ -145,7 +146,7 @@ def clean(
     cleaned_text = ''
     for token in text:
         # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
-        if token.startswith('(e.') and preserve_foreign_translation: 
+        if token.startswith('(e.') and preserve_foreign: 
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
         elif token.strip(r",.\?!:()") in char_to_preserve:
@@ -177,7 +178,7 @@ def main():
                 #punct_set=[',','.'],
                 # preserve_emoji=True,
                 # clean_emoji=True,
-                #preserve_foreign_translation=True,
+                #preserve_foreign=True,
                 #emoji_replacement="<emoji>",
                 #punct_replacement="  <punctuation>  ",
                 ))
