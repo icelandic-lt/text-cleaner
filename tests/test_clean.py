@@ -12,22 +12,22 @@ def test_default_clean():
     assert clean.clean("123") == "123"
 
 def test_preserve_characters():
-    assert clean.clean("π námundast í 3.14", char_to_preserve=['π']) == "π námundast í 3.14"
-    assert clean.clean("ß Ø", char_to_preserve=['ß']) == "ß Ö"
-    assert clean.clean("🤡😎🔥📌", char_to_preserve=['🤡','😎'], emoji_replacement='') == "🤡😎"
+    assert clean.clean("π námundast í 3.14", string_to_preserve=['π']) == "π námundast í 3.14"
+    assert clean.clean("ß Ø", string_to_preserve=['ß']) == "ß Ö"
+    assert clean.clean("🤡😎🔥📌", string_to_preserve=['🤡','😎'], emoji_replacement='') == "🤡😎"
     assert clean.clean("german 🐍: ßßß", preserve_emoji=True) == "german 🐍: ßßß"
     assert clean.clean("a 🧹 is used to play quidditch", clean_emoji=True) == "a 🧹 is used to play kuidditkh"
-    assert clean.clean("∫∬∭∮∯∰∱∲∳", char_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
-    assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
+    assert clean.clean("∫∬∭∮∯∰∱∲∳", string_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
+    assert clean.clean("Zorro notar ekki hanzka", string_to_preserve=['Z']) == "Zorro notar ekki hanska"
     #  characters stored in unicode_maps
-    assert clean.clean("gríski stafurinn \u03a4", char_to_preserve=['\u03a4']) == "gríski stafurinn \u03a4"
-    assert clean.clean("hebreski stafurinn \u05db", char_to_preserve=['\u05db']) == "hebreski stafurinn \u05db"
-    assert clean.clean("pólski stafurinn ł", char_to_preserve=['ł']) == "pólski stafurinn ł"
+    assert clean.clean("gríski stafurinn \u03a4", string_to_preserve=['\u03a4']) == "gríski stafurinn \u03a4"
+    assert clean.clean("hebreski stafurinn \u05db", string_to_preserve=['\u05db']) == "hebreski stafurinn \u05db"
+    assert clean.clean("pólski stafurinn ł", string_to_preserve=['ł']) == "pólski stafurinn ł"
     # tokens to be preserved
-    assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz']) == "s zz sss ssss"
-    assert clean.clean("z zz zzz zzzz", char_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
-    assert clean.clean("Barizt hefur Zorro, margoft án hanzka", char_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", char_to_preserve=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
+    assert clean.clean("z zz zzz zzzz", string_to_preserve=['zz']) == "s zz sss ssss"
+    assert clean.clean("z zz zzz zzzz", string_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
+    assert clean.clean("Barizt hefur Zorro, margoft án hanzka", string_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", string_to_preserve=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
     
 def test_clean_punctuation():
     # replace punct set
@@ -56,8 +56,8 @@ def test_replace_character():
     assert clean.clean("..,,.,.,.,", punct_replacement='1') == "1111111111"
     assert clean.clean(".", punct_replacement='\u03ae') == "\u03ae"
     # character replace
-    assert clean.clean("aábdð", char_to_replace={'a': 'k'}) == "kábdð"
-    assert clean.clean("abdð", char_to_replace={'ð': 'eéfghi'}) == "kbdeéfghi"
+    assert clean.clean("aábdð", char_replacement={'a': 'k'}) == "kábdð"
+    assert clean.clean("abdð", char_replacement={'ð': 'eéfghi'}) == "kbdeéfghi"
     # replace alphabet
     assert clean.clean("aábdð", alphabet=['a','b','c','d']) == "k bdeéfghi"
     assert clean.clean("abcdefghijklmnopqrstuvwxyz") == "bcd"

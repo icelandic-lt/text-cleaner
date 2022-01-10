@@ -39,9 +39,9 @@ def get_ice_alpha_replacement(char) -> str:
     return ''
 
 
-def replace_emojis(text, emoji_replacement, char_to_preserve) -> str:
+def replace_emojis(text, emoji_replacement, string_to_preserve) -> str:
     for emoji in emoji_dictionary.EMOJI_PATTERN:
-        if emoji in text and emoji not in char_to_preserve:
+        if emoji in text and emoji not in string_to_preserve:
             text = text.replace(emoji, emoji_replacement)
 
     return text
@@ -72,10 +72,10 @@ def text_to_tokens(text) -> list:
     return re.split(r'\s(?![^(]*\))', text)
 
 
-def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) -> str:
+def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) -> str:
     """
     Checks each character of the input word (token) to see if it matches any predefined character, as defined
-    in constants or the second input 'char_to_preserve'.
+    in constants or the second input 'string_to_preserve'.
     """
 
     for _, char in enumerate(token):
@@ -84,7 +84,7 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) ->
             token = token.replace(char, repl)
         elif should_delete(char):
             token = token.replace(char, '')
-        elif char in char_to_preserve or char.isdigit():
+        elif char in string_to_preserve or char.isdigit():
             continue
         elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emoji:
             if clean_emoji:
@@ -99,8 +99,8 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) ->
 
 def clean(
     text,
-    char_to_preserve=[],
-    char_to_replace={},
+    string_to_preserve=[],
+    char_replacement={},
     alphabet=[],
     punct_set=[],
     preserve_emoji=False,
@@ -118,22 +118,22 @@ def clean(
 
     Args:
         text                  : raw text for cleaning                       
-        char_to_preserve      : list of char types forbidden to strip or convert
-        char_to_replace       : dictionary of characters to convert     
-        alphabet              : list of char that don't need converting     
-        punct_set             : list of punctuation marks set to preserve
-        preserve_emoji        : if True, we preserve emojis
-        clean_emoji           : if True, we convert emojis to their corresponding text description 
-        preserve_foreign      : if True, we preserve foreign translations that are prefixed with '(e.'
+        char_replacement      : dictionary of characters to convert     
         emoji_replacement     : str to replace emojis with        
         punct_replacement     : str to replace punctuations with
+        alphabet              : list of char that don't need converting     
+        punct_set             : list of punctuation marks set to preserve
+        preserve_string       : list of strings forbidden to strip or convert
+        preserve_emoji        : if True, we preserve emojis
+        preserve_foreign      : if True, we preserve foreign translations that are prefixed with '(e.'
+        clean_emoji           : if True, we convert emojis to their corresponding text description 
 
     """
     
     if emoji_replacement and not clean_emoji and not preserve_emoji:
-        text = replace_emojis(text, emoji_replacement, char_to_preserve)
-    if char_to_replace:
-        umaps.replacement_dictionary.update(char_to_replace)
+        text = replace_emojis(text, emoji_replacement, string_to_preserve)
+    if char_replacement:
+        umaps.replacement_dictionary.update(char_replacement)
     if punct_set:
         consts.punctuation_marks = punct_set
     if alphabet:
@@ -149,13 +149,13 @@ def clean(
         if token.startswith('(e.') and preserve_foreign: 
             token = clean_foreign_text_occurrence(token)
             cleaned_text += token
-        elif token.strip(r",.\?!:()") in char_to_preserve:
+        elif token.strip(r",.\?!:()") in string_to_preserve:
             for punct_mark in ['"','(',')']:
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         else:
-            cleaned_text += validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji)
+            cleaned_text += validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
@@ -172,8 +172,8 @@ def parse_arguments():
 def main():
     text = parse_arguments()
     print(clean(text,
-                #char_to_preserve=['c'],
-                #char_to_replace={'t': 's'},
+                #string_to_preserve=['c'],
+                char_replacement={'tt': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
                 # preserve_emoji=True,
