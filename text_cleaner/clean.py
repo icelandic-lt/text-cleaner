@@ -50,11 +50,7 @@ def replace_emojis(text, emoji_replacement, char_to_preserve) -> str:
 def get_replacement(char) -> str:
     if char in umaps.replacement_dictionary:
         return umaps.replacement_dictionary[char]
-
-
-def should_delete(char) -> str:
-    return char in umaps.delete_chars_map
-
+        
 
 def clean_foreign_text_occurrence(token) -> str:
     token = token.replace("(e.", "<en>") # Subject to change
@@ -82,8 +78,6 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) ->
         repl = get_replacement(char)
         if repl:
             token = token.replace(char, repl)
-        elif should_delete(char):
-            token = token.replace(char, '')
         elif char in char_to_preserve or char.isdigit():
             continue
         elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emoji:
