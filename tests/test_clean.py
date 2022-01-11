@@ -8,26 +8,26 @@ def test_default_clean():
     assert clean.clean("📌 red pin") == ". red pin"
     assert clean.clean("ß Ø") == "ss Ö"
     assert clean.clean("<p> HTML tög </p>") == "p HTML tög p"
-    assert clean.clean("raki (e. humidity)") == "raki , e. humidity ,"
+    assert clean.clean("raki (e. humidity)") == 'raki <lang xml:lang="en-GB"> humidity </lang>'
     assert clean.clean("123") == "123"
 
 def test_preserve_characters():
-    assert clean.clean("π námundast í 3.14", string_to_preserve=['π']) == "π námundast í 3.14"
-    assert clean.clean("ß Ø", string_to_preserve=['ß']) == "ß Ö"
-    assert clean.clean("🤡😎🔥📌", string_to_preserve=['🤡','😎'], emoji_replacement='') == "🤡😎"
+    assert clean.clean("π námundast í 3.14", preserve_string=['π']) == "π námundast í 3.14"
+    assert clean.clean("ß Ø", preserve_string=['ß']) == "ß Ö"
+    assert clean.clean("🤡😎🔥📌", preserve_string=['🤡','😎'], emoji_replacement='') == "🤡😎"
     assert clean.clean("german 🐍: ßßß", preserve_emoji=True) == "german 🐍: ßßß"
     assert clean.clean("a 🧹 is used to play quidditch", clean_emoji=True) == "a 🧹 is used to play kuidditkh"
-    assert clean.clean("∫∬∭∮∯∰∱∲∳", string_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
-    assert clean.clean("Zorro notar ekki hanzka", string_to_preserve=['Z']) == "Zorro notar ekki hanska"
-    #  characters stored in unicode_maps
-    assert clean.clean("gríski stafurinn \u03a4", string_to_preserve=['\u03a4']) == "gríski stafurinn \u03a4"
-    assert clean.clean("hebreski stafurinn \u05db", string_to_preserve=['\u05db']) == "hebreski stafurinn \u05db"
-    assert clean.clean("pólski stafurinn ł", string_to_preserve=['ł']) == "pólski stafurinn ł"
+    assert clean.clean("∫∬∭∮∯∰∱∲∳", preserve_string=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
+    assert clean.clean("Zorro notar ekki hanzka", preserve_string=['Z']) == "Zorro notar ekki hanska"
+    # characters stored in unicode_maps
+    assert clean.clean("gríski stafurinn \u03a4", preserve_string=['\u03a4']) == "gríski stafurinn \u03a4"
+    assert clean.clean("hebreski stafurinn \u05db", preserve_string=['\u05db']) == "hebreski stafurinn \u05db"
+    assert clean.clean("pólski stafurinn ł", preserve_string=['ł']) == "pólski stafurinn ł"
     # tokens to be preserved
-    assert clean.clean("z zz zzz zzzz", string_to_preserve=['zz']) == "s zz sss ssss"
-    assert clean.clean("z zz zzz zzzz", string_to_preserve=['zz', 'zzzz']) == "s zz sss zzzz"
-    assert clean.clean("Barizt hefur Zorro, margoft án hanzka", string_to_preserve=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", string_to_preserve=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
+    assert clean.clean("z zz zzz zzzz", preserve_string=['zz']) == "s zz sss ssss"
+    assert clean.clean("z zz zzz zzzz", preserve_string=['zz', 'zzzz']) == "s zz sss zzzz"
+    assert clean.clean("Barizt hefur Zorro, margoft án hanzka", preserve_string=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", preserve_string=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
     
 def test_clean_punctuation():
     # replace punct set
@@ -40,9 +40,9 @@ def test_helper_functions():
     assert clean.validate_characters("\u03ba", [], False, False).strip() == "kappa" 
     assert clean.validate_characters("×", [], False, False).strip() == ""
     # method tested is subject to change.
-    assert clean.clean_foreign_text_occurrence("(e. Hello)") == '<lang xml:lang="en-GB"> Hello </lang> '
-    assert clean.clean_foreign_text_occurrence("(e. Hello World)") == '<lang xml:lang="en-GB"> Hello World </lang> '
-    assert clean.clean_foreign_text_occurrence("(e. kwartz)") == '<lang xml:lang="en-GB"> kwartz </lang> '
+    assert clean.labelled_translation_to_ssml("(e. Hello)") == '<lang xml:lang="en-GB"> Hello </lang> '
+    assert clean.labelled_translation_to_ssml("(e. Hello World)") == '<lang xml:lang="en-GB"> Hello World </lang> '
+    assert clean.labelled_translation_to_ssml("(e. kwartz)") == '<lang xml:lang="en-GB"> kwartz </lang> '
     # tests 'get_ice_alpha_replacement' as well
     assert clean.validate_characters("(\")", [], False, False).strip() == ",  ,  ,"
     assert clean.validate_characters("())(\"", [")", "\""], False, False).strip() == ", )) , \""

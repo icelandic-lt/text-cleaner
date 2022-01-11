@@ -8,13 +8,27 @@ from text_cleaner import constants
 def remove_whitespace_before_punctuation(text) -> str:
     # the following regex demarks a string with 1 or more 
     # whitespaces followed by a punctuation mark
-    return re.sub(r'\s+([,.?!])', r'\1', text)
+    return re.sub(r'\s+([,.?!])', '', text)
 
 
 def remove_consecutive_punct_marks(soup) -> str:
     # the following regex demarks a string with 1 punctuation 
     # mark followed by 1 or more punctuation marks
-    return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', soup)
+    return re.sub(r'([,.:;?!])[,.:;?!]+', '', soup)
+
+
+def tidy_up_text_format(text):
+    """
+    Removes duplicate punctuation marks, whitespaces or newlines. Also makes sure 
+    there are no poorly inserted strings, in respect to TTS engines.
+    """
+    text = text.replace(" \n","\n")
+    text = re.sub(r'\n\n+', '', text).strip()
+
+    text = remove_whitespace_before_punctuation(text)
+    text = remove_consecutive_punct_marks(text)
+
+    return text
 
 
 def clean_html_tables(soup) -> element.Tag:
@@ -85,11 +99,14 @@ def clean_html(
     html_soup = append_punctuation_to_tag_content(html_soup, replace_html_closing_tag_with)
     
     text = html_soup.get_text()
-    text = remove_whitespace_before_punctuation(text)
-    text = remove_consecutive_punct_marks(text)
+    text = tidy_up_text_format(text)
+    
+    # text = text.replace("\n\n","\n")
+    # for t in text:
+    #     print(repr(t))
 
     if write_to_file:
-        f = open(write_to_file, "a")    
+        f = open(write_to_file, "a")
         f.write(str(text))
         f.close()
 
@@ -111,7 +128,7 @@ def main():
 
     print(
         clean_html(
-            html_doc='html_snip.html',
+            html_doc='hljóðbók.html',
             replace_html_closing_tag_with=dictionary,
             content_parent_div={"class": "content-text"},
             write_to_file='cleaned_html_text.txt'

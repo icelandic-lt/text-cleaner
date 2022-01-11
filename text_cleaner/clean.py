@@ -56,11 +56,18 @@ def should_delete(char) -> str:
     return char in umaps.delete_chars_map
 
 
-def clean_foreign_text_occurrence(token) -> str:
+def labelled_translation_to_ssml(token) -> str:
     token = token.replace("(e.", '<lang xml:lang="en-GB">') # SSML standard 
     token = token.replace(")", " </lang>")
 
     return token + ' '
+
+
+def clean_labelled_translation(token, delete_labelled_translations) -> str:
+    if not delete_labelled_translations:
+        return labelled_translation_to_ssml(token)
+    
+    return ' '
 
 
 def text_to_tokens(text) -> list:
@@ -77,7 +84,6 @@ def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) 
     Checks each character of the input word (token) to see if it matches any predefined character, as defined
     in constants or the second input 'string_to_preserve'.
     """
-
     for _, char in enumerate(token):
         repl = get_replacement(char)
         if repl:
@@ -99,17 +105,16 @@ def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) 
 
 def clean(
     text,
-    string_to_preserve=[],
-    char_replacement={},
-    alphabet=[],
-    punct_set=[],
+    char_replacement={}, 
+    emoji_replacement='.', 
+    punct_replacement='', 
+    alphabet=[], 
+    punct_set=[], 
+    preserve_string=[], 
     preserve_emoji=False,
     clean_emoji=False,
-    preserve_foreign=False,
-    emoji_replacement='.',
-    punct_replacement='',
+    delete_labelled_translations=False,
 ) -> str:
-
     """
     Process (clean) the raw input text for NLP (Natural Language Processing) by removing 
     unhelpful and unusable data, as well as reducing noise.
@@ -131,7 +136,7 @@ def clean(
     """
     
     if emoji_replacement and not clean_emoji and not preserve_emoji:
-        text = replace_emojis(text, emoji_replacement, string_to_preserve)
+        text = replace_emojis(text, emoji_replacement, preserve_string)
     if char_replacement:
         umaps.replacement_dictionary.update(char_replacement)
     if punct_set:
@@ -146,16 +151,15 @@ def clean(
     cleaned_text = ''
     for token in text:
         # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
-        if token.startswith('(e.') and preserve_foreign: 
-            token = clean_foreign_text_occurrence(token)
-            cleaned_text += token
-        elif token.strip(r",.\?!:()") in string_to_preserve:
+        if token.startswith('(e.'):
+            cleaned_text += clean_labelled_translation(token, delete_labelled_translations)
+        elif token.strip(r",.\?!:()") in preserve_string:
             for punct_mark in ['"','(',')']:
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         else:
-            cleaned_text += validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji)
+            cleaned_text += validate_characters(token, preserve_string, preserve_emoji, clean_emoji)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
