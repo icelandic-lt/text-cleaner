@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import re
 from text_cleaner import clean, constants
+from text_cleaner.clean_html import clean_html
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
@@ -33,6 +34,9 @@ def test_clean_punctuation():
     # replace punct set
     assert clean.clean(",.:!?", punct_set=[',','.']) == ",." 
 
+def test_labelled_translations():
+    assert clean.clean("algengt er að skrifa Halló Heimur (e. Hello World)", delete_labelled_translations=True) == "algengt er að skrifa Halló Heimur"
+
 def test_helper_functions():
     # tests both 'get_replacement' and 'should_delete' as well
     assert clean.validate_characters("\u010c", [], False, False).strip() == "Tj" 
@@ -61,3 +65,4 @@ def test_replace_character():
     # replace alphabet
     assert clean.clean("aábdð", alphabet=['a','b','c','d']) == "k bdeéfghi"
     assert clean.clean("abcdefghijklmnopqrstuvwxyz") == "bcd"
+
