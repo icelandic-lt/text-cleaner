@@ -8,13 +8,13 @@ from text_cleaner import constants
 def remove_whitespace_before_punctuation(text) -> str:
     # the following regex demarks a string with 1 or more 
     # whitespaces followed by a punctuation mark
-    return re.sub(r'\s+([,.?!])', '', text)
+    return re.sub(r'\s+([,.:;?!])', r'\1', text)
 
 
-def remove_consecutive_punct_marks(soup) -> str:
+def remove_consecutive_punct_marks(text) -> str:
     # the following regex demarks a string with 1 punctuation 
     # mark followed by 1 or more punctuation marks
-    return re.sub(r'([,.:;?!])[,.:;?!]+', '', soup)
+    return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', text)
 
 
 def tidy_up_text_format(text):
@@ -24,6 +24,7 @@ def tidy_up_text_format(text):
     """
     text = text.replace(" \n","\n")
     text = re.sub(r'\n\n+', '', text).strip()
+    text = re.sub('  +', ' ', text)
 
     text = remove_whitespace_before_punctuation(text)
     text = remove_consecutive_punct_marks(text)
@@ -131,7 +132,7 @@ def main():
             content_parent_div={"class": "content-text"},
             write_to_file='cleaned_html_text.txt'
         ))
-
+    
 
 if __name__ == '__main__':
     main()
