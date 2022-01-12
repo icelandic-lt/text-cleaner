@@ -86,12 +86,14 @@ def clean_html(
     """
     Preprocess html document input for text cleaning by parsing text content 
     specified by input, by removing and replacing html tags based on dictionary input.
+    The parent div of the content to be parsed and cleaned has to be specified so the
+    html cleaner can distinct between what's relevant.
     
     Args:
         html_doc                        : html document to extract from
         replace_html_closing_tag_with   : dictionary of html tags to be convert 
         write_to_file                   : name of output file
-        content_parent_div              : the parent div of all the content to be cleaned
+        content_parent_div              : the parent div of all the content to be parsed
     """
 
     html_soup = extract_html_from_file(html_doc, content_parent_div)
@@ -100,10 +102,6 @@ def clean_html(
     
     text = html_soup.get_text()
     text = tidy_up_text_format(text)
-    
-    # text = text.replace("\n\n","\n")
-    # for t in text:
-    #     print(repr(t))
 
     if write_to_file:
         f = open(write_to_file, "a")
