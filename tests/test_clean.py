@@ -1,7 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import re
 from text_cleaner import clean, constants
-from text_cleaner.clean_html import clean_html
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
