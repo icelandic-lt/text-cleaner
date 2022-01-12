@@ -14,6 +14,7 @@ def remove_whitespace_before_punctuation(text) -> str:
 def remove_consecutive_punct_marks(text) -> str:
     # the following regex demarks a string with 1 punctuation 
     # mark followed by 1 or more punctuation marks
+    # TODO: currently gets rid of question marks following an exclamation
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', text)
 
 
@@ -23,7 +24,7 @@ def tidy_up_text_format(text):
     there are no poorly inserted strings, in respect to TTS engines.
     """
     text = text.replace(" \n","\n")
-    text = re.sub(r'\n\n+', '', text).strip()
+    text = re.sub(r'\n\n+', '\n', text).strip()
     text = re.sub('  +', ' ', text)
 
     text = remove_whitespace_before_punctuation(text)
