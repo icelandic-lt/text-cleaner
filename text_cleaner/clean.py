@@ -70,6 +70,12 @@ def clean_labelled_translation(token, delete_labelled_translations) -> str:
     return ' '
 
 
+def remove_consecutive_whitespace_and_punctuation(cleaned_text):
+    # the following regex demarks a string that starts with whitespace and trials
+    # with more whitespaces or punctuation marks
+    return re.sub(r'(\s)[\s,.:;?!]+', r'\1', cleaned_text)
+
+
 def text_to_tokens(text) -> list:
     """
     Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
@@ -162,6 +168,8 @@ def clean(
             cleaned_text += validate_characters(token, preserve_string, preserve_emoji, clean_emoji)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+    cleaned_text = remove_consecutive_whitespace_and_punctuation(cleaned_text)
+
     return cleaned_text.strip()
 
 
