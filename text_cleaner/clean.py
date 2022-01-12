@@ -122,16 +122,16 @@ def clean(
     Text cleaning is task specific so multiple configurations are made available.
 
     Args:
-        text                  : raw text for cleaning                       
-        char_replacement      : dictionary of characters to convert     
-        emoji_replacement     : str to replace emojis with        
-        punct_replacement     : str to replace punctuations with
-        alphabet              : list of char that don't need converting     
-        punct_set             : list of punctuation marks set to preserve
-        preserve_string       : list of strings forbidden to strip or convert
-        preserve_emoji        : if True, we preserve emojis
-        preserve_foreign      : if True, we preserve foreign translations that are prefixed with '(e.'
-        clean_emoji           : if True, we convert emojis to their corresponding text description 
+        text                            : raw text for cleaning                       
+        char_replacement                : dictionary of characters to convert     
+        emoji_replacement               : str to replace emojis with        
+        punct_replacement               : str to replace punctuations with
+        alphabet                        : list of char that don't need converting     
+        punct_set                       : list of punctuation marks set to preserve
+        preserve_string                 : list of strings forbidden to strip or convert
+        preserve_emoji                  : if True, we preserve emojis
+        delete_labelled_translations    : if True, we preserve foreign translations that are prefixed with '(e.'
+        clean_emoji                     : if True, we convert emojis to their corresponding text description 
 
     """
     
