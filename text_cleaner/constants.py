@@ -3,5 +3,5 @@ character_alphabet = ['a', 'á', 'b', 'd', 'ð', 'e', 'é', 'f', 'g', 'h', 'i', 
 
 punctuation_marks = {'.',',',':','!','?'}
 
-HTML_ELEMENTS = {'ul','ol','li','dl','dt','dd','table','tr',
-                 'td','h1','h2','h3','h4','h5','h6','p','br','hr'}
+HTML_ELEMENTS = {'ul','ol','li','dl','dt','dd','table','tr','td','span',
+                'strong','h1','h2','h3','h4','h5','h6','p','br','hr'}
