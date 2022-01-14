@@ -57,7 +57,7 @@ def should_delete(char) -> str:
 
 
 def labelled_translation_to_ssml(token) -> str:
-    token = token.replace("(e. ", '<lang xml:lang="en-GB">') # SSML standard 
+    token = token.replace("(e. ", '<lang xml:lang="en-GB"> ') # SSML standard 
     token = token.replace(")", " </lang>")
 
     return token + ' '
@@ -158,7 +158,7 @@ def clean(
     cleaned_text = ''
     for token in text:
         # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
-        if token.startswith('(e.'):
+        if token.startswith('(e. '):
             cleaned_text += clean_labelled_translation(token, delete_labelled_translations)
         elif token.strip(r",.\?!:()") in preserve_string:
             for punct_mark in ['"','(',')']:
