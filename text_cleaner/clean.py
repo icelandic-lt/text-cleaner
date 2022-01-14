@@ -57,7 +57,7 @@ def should_delete(char) -> str:
 
 
 def labelled_translation_to_ssml(token) -> str:
-    token = token.replace("(e.", '<lang xml:lang="en-GB">') # SSML standard 
+    token = token.replace("(e. ", '<lang xml:lang="en-GB">') # SSML standard 
     token = token.replace(")", " </lang>")
 
     return token + ' '
