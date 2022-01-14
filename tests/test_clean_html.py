@@ -15,3 +15,4 @@ def test_text_cleanup():
     assert clean_html.tidy_up_text_format("Hello.  \n\n World.") == ("Hello. \n World.")
     assert clean_html.tidy_up_text_format(".,\n   \n\n?   \n\n   .! :.") == "."
     assert clean_html.tidy_up_text_format("Trying,  is the first! :step: toward failure.") == "Trying, is the first!step: toward failure."
+    
