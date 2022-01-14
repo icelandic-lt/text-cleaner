@@ -68,7 +68,7 @@ def text_to_tokens(text) -> list:
     return re.split(r'\s(?![^(]*\))', text)
 
 
-def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) -> str:
+def validate_characters(token, char_to_preserve, preserve_emojis, clean_emoji) -> str:
     """
     Checks each character of the input word (token) to see if it matches any predefined character, as defined
     in constants or the second input 'char_to_preserve'.
@@ -80,10 +80,10 @@ def validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji) ->
             token = token.replace(char, repl)
         elif char in char_to_preserve or char.isdigit():
             continue
-        elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emoji:
+        elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emojis:
             if clean_emoji:
                 char = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
-            elif preserve_emoji:
+            elif preserve_emojis:
                 continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks:
             token = replace_or_drop(char, token)
@@ -97,7 +97,7 @@ def clean(
     char_to_replace={},
     alphabet=[],
     punct_set=[],
-    preserve_emoji=False,
+    preserve_emojis=False,
     clean_emoji=False,
     preserve_foreign_translation=False,
     emoji_replacement='.',
@@ -116,14 +116,14 @@ def clean(
         char_to_replace     : dictionary of characters to convert     
         alphabet            : list of char that don't need converting     
         punct_set           : list of punctuation marks set to preserve
-        preserve_emoji      : if True, we preserve emojis
+        preserve_emojis     : if True, we preserve emojis
         clean_emoji         : if True, we convert emojis to their corresponding text description 
         emoji_replacement   : str to replace emojis with        
         punct_replacement   : str to replace punctuations with
 
     """
     
-    if emoji_replacement and not clean_emoji and not preserve_emoji:
+    if emoji_replacement and not clean_emoji and not preserve_emojis:
         text = replace_emojis(text, emoji_replacement, char_to_preserve)
     if char_to_replace:
         umaps.replacement_dictionary.update(char_to_replace)
@@ -148,7 +148,7 @@ def clean(
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         else:
-            cleaned_text += validate_characters(token, char_to_preserve, preserve_emoji, clean_emoji)
+            cleaned_text += validate_characters(token, char_to_preserve, preserve_emojis, clean_emoji)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
@@ -169,7 +169,7 @@ def main():
                 #char_to_replace={'t': 's'},
                 #alphabet=['a','b'],
                 #punct_set=[',','.'],
-                # preserve_emoji=True,
+                # preserve_emojis=True,
                 # clean_emoji=True,
                 #preserve_foreign_translation=True,
                 #emoji_replacement="<emoji>",

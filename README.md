@@ -4,11 +4,11 @@
 
 Text cleaning module for processing raw text input.
 
-This module is a component of a TTS-Frontend engine, more specifically, it is the first step in processing raw text input before being normalized in the next step.
+This module is a component of a TTS-Frontend engine, more specifically, it is the first step in processing raw text input before being normalized in the next step in the TTS-Frontend pipeline.
 
 Despite this module being designed as a component of the TTS-Frontend engine, it's designed with versatility in mind to accommodate various text cleaning tasks, therefore multiple configurations have been built into the text cleaner to allow for task specific cleaning.
 
-If being used as a part of the TTS-Frontend pipeline then no configurations should be made, the default values are based on input/output specifications between components in the TTS-Frontend pipeline.
+Coupled with this text cleaning module is a preprocessing step for text embedded in html documents (primarily designed for audibooks). This preprocessing step includes parsing, extraction and organization of text for TTS engines.
 
 ## Installation
 ```bash
@@ -25,7 +25,7 @@ $ pip install -e .
 
 ### Command line tool
 ```bash
-# Run the app by passing in "text to be cleaned". 
+# Run the app by passing in a "string" to be cleaned. 
 $ python3 text_cleaner/main.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
 
 ['hann bubbi söng . afmælissönginn fyrir pí.']
@@ -35,7 +35,6 @@ $ python3 text_cleaner/main.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π.
 ```python
 from text-cleaner import clean
 
-# All available arguments are listed below with their default values (most are empty by design).
 clean(
     "text to be cleaned",                  
     char_replacement={},                 # dictionary of characters to convert     
@@ -44,14 +43,17 @@ clean(
     alphabet=[],                         # list of char that don't need converting     
     punct_set=[],                        # list of punctuation marks set to preserve
     preserve_string=[],                  # list of strings forbidden to strip or convert
-    preserve_emoji=False,                # if True, we preserve emojis
+    preserve_emojis=False,                # if True, we preserve emojis
     clean_emoji=False,                   # if True, we convert emojis to their text description 
     delete_labelled_translations=False,  # if True, we delete all labelled translations
 )
 
+# If being used as a part of the TTS-Frontend pipeline, then no configurations should be made. All default 
+# values are configured for input/output specifications between components in the TTS-Frontend pipeline.
+
 # basic example, no arguments set.
 >>> print(clean("π á afmæli í dåg 🎉"))
-"pí á afmæli í dag ."
+"pí á afmæli í dag."
 
 # we can convert emojis to any string and also configure which characters are to be preserved.
 >>> print(clean("π á afmæli í dåg 🎉", emoji_replacement="emójí", preserve_string=['π'])
@@ -59,7 +61,7 @@ clean(
 
 # instead of removing characters, we can convert them to a string of our choice. 
 >>> print(clean("π á afmæli í dåg 🎉", char_replacement={'æ':'ae'}, ))
-"pí á afmaeli í dag ."
+"pí á afmaeli í dag."
 ```
 
 
