@@ -4,62 +4,65 @@
 
 Text cleaning module for processing raw text input.
 
-This module is a component of the TTS-Frontend Pipeline, more specifically, it is the first step in processing raw text input before being normalized in the next step.
+This module is a component of a TTS-Frontend engine, more specifically, it is the first step in processing raw text input before being normalized in the next step in the TTS-Frontend pipeline.
 
-If being used as a part of the TTS-Frontend Pipeline then no configurations should be made, the default values are based on input/output specifications between components in the TTS-Frontend.
+Despite this module being designed as a component of the TTS-Frontend engine, it's designed with versatility in mind to accommodate various text cleaning tasks, therefore multiple configurations have been built into the text cleaner to allow for task specific cleaning.
 
-Despite this module being designed as a component of the TTS-Frontend Pipeline its designed with versatility in mind since text cleaning is task specific so multiple configurations are available.
+Coupled with this text cleaning module is a preprocessing feature for text embedded in html documents (primarily designed for audiobooks). This preprocessing step includes parsing, extraction and re-organizing of text for TTS engines.
 
-## Usage
-
-### From the terminal
-
+## Installation
 ```bash
-# Clone this repository.
+# clone this repository.
 $ git clone https://github.com/grammatek/text-cleaner
 
-# Enter the directory.
-$ cd ./text-cleaner
+# enter the repository
+$ cd text-cleaner
 
-# Run the app by passing in "any string". 
+# install dependencies
+$ pip install -e .
+```
+## Usage
+
+### Command line tool
+```bash
+# Run the app by passing in a "string" to be cleaned. 
 $ python3 text_cleaner/main.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
 
-['hann bubbi söng . afmælissönginn fyrir pí.']
+['hann bubbi söng. afmælissönginn fyrir pí.']
 ```
 
 ### As import in Python
 ```python
 from text-cleaner import clean
 
-# All available arguments are listed below with their default values (most are empty by design). 
-cleaned_text = clean(
-    "text to be cleaned",
-    char_to_preserve=[],            # list of characters forbidden to convert or strip.
-    char_to_replace={},             # dictionary of characters to convert.
-    alphabet=[],                    # list of the alphabet letters used (Icelandic as default).
-    punct_set=[],                   # list of punctuations (we strip the rest).
-    clean_emoji=True,               # clean emojis i.e. replace them.
-    replace_emoji_with=".",         # replace all emojis with custom char.           
+clean(
+    "text to be cleaned",                  
+    char_replacement={},                 # dictionary of characters to convert     
+    emoji_replacement='.',               # str to replace emojis with        
+    punct_replacement='',                # str to replace punctuations with
+    alphabet=[],                         # list of char that don't need converting     
+    punct_set=[],                        # list of punctuation marks set to preserve
+    preserve_string=[],                  # list of strings forbidden to strip or convert
+    preserve_emojis=False,               # if True, we preserve emojis
+    clean_emoji=False,                   # if True, we convert emojis to their text description 
+    delete_labelled_translations=False,  # if True, we delete all labelled translations
 )
 
-# basic example, no usage of arguments.
->>> print(clean("π á afmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins."))
-"pí á afmæli í dag, Bubbi söng . afmælissönginn í tilefni dagsins."
+# If being used as a part of the TTS-Frontend pipeline, then no configurations should be made. All default 
+# values are configured for input/output specifications between components in the TTS-Frontend pipeline.
 
-# we can convert emojis to any string, also configure which characters are "off limits".
->>> print(clean("π á afmæli í dag, Bubbi söng 🎤 afmælißønginn í tilefni dagsins.", 
-            replace_emoji_with=":emójí:", char_to_preserve=['π', 'ø'])
-"π á afmæli í dag, Bubbi söng :emójí: afmælissønginn í tilefni dagsins."
+# basic example, no arguments set.
+>>> print(clean("π á afmæli í dåg 🎉"))
+"pí á afmæli í dag."
 
-# we can define what punctuation marks we want to keep, also if we want emojis to be preserved.
->>> print(clean("sem dæmi: ekki hlaupa á ganginum! hrópa 😱 mamma, amma og pabbi öll í kór.", 
-            clean_emoji=False, punct_set=['.',',']))
-"sem dæmi ekki hlaupa á ganginum hrópa 😱 mamma, amma og pabbi öll í kór."
+# we can convert emojis to any string and also configure which characters are to be preserved.
+>>> print(clean("π á afmæli í dåg 🎉", emoji_replacement="emójí", preserve_string=['π'])
+"π á afmæli í dag emójí"
 
-# instead of getting rid of some characters, we can also convert them to a string of our choice. 
->>> print(clean("sem dæmi: ekki hlaupa á ganginum! hrópa mamma, amma og pabbi öll í kór.", 
-            char_to_replace={'æ':'ae', ':': ',', '!': '.'}))
-"sem daemi, ekki hlaupa á ganginum. hrópa mamma, amma og pabbi öll í kór."
+# instead of removing characters, we can convert them to a string of our choice. 
+>>> print(clean("π á afmæli í dåg 🎉", char_replacement={'æ':'ae'}, clean_emoji=True))
+"pí á afmaeli í dag party popper"
+
 ```
 
 

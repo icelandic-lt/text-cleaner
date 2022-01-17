@@ -15,7 +15,7 @@ def test_preserve_characters():
     assert clean.clean("π námundast í 3.14", char_to_preserve=['π']) == "π námundast í 3.14"
     assert clean.clean("ß Ø", char_to_preserve=['ß']) == "ß Ö"
     assert clean.clean("🤡😎🔥📌", char_to_preserve=['🤡','😎'], emoji_replacement='') == "🤡😎"
-    assert clean.clean("german 🐍: ßßß", preserve_emoji=True) == "german 🐍: ßßß"
+    assert clean.clean("german 🐍: ßßß", preserve_emojis=True) == "german 🐍: ßßß"
     assert clean.clean("a 🧹 is used to play quidditch", clean_emoji=True) == "a 🧹 is used to play kuidditkh"
     assert clean.clean("∫∬∭∮∯∰∱∲∳", char_to_preserve=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
     assert clean.clean("Zorro notar ekki hanzka", char_to_preserve=['Z']) == "Zorro notar ekki hanska"
