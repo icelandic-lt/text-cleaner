@@ -101,7 +101,8 @@ def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) 
             continue
         elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emoji:
             if clean_emoji:
-                char = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
+                emoji_desc = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
+                token = token.replace(char, emoji_desc)
             elif preserve_emoji:
                 continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks:
@@ -117,7 +118,7 @@ def clean(
     punct_replacement='', 
     alphabet=[], 
     punct_set=[], 
-    preserve_string=[], 
+    preserve_string=[],
     preserve_emoji=False,
     clean_emoji=False,
     delete_labelled_translations=False,
@@ -184,17 +185,7 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    print(clean(text,
-                #string_to_preserve=['c'],
-                char_replacement={'tt': 's'},
-                #alphabet=['a','b'],
-                #punct_set=[',','.'],
-                # preserve_emoji=True,
-                # clean_emoji=True,
-                #preserve_foreign=True,
-                #emoji_replacement="<emoji>",
-                #punct_replacement="  <punctuation>  ",
-                ))
+    print(clean(text))
 
 
 if __name__ == '__main__':
