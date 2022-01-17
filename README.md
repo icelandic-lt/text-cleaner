@@ -8,7 +8,7 @@ This module is a component of a TTS-Frontend engine, more specifically, it is th
 
 Despite this module being designed as a component of the TTS-Frontend engine, it's designed with versatility in mind to accommodate various text cleaning tasks, therefore multiple configurations have been built into the text cleaner to allow for task specific cleaning.
 
-Coupled with this text cleaning module is a preprocessing step for text embedded in html documents (primarily designed for audibooks). This preprocessing step includes parsing, extraction and organization of text for TTS engines.
+Coupled with this text cleaning module is a preprocessing feature for text embedded in html documents (primarily designed for audiobooks). This preprocessing step includes parsing, extraction and re-organizing of text for TTS engines.
 
 ## Installation
 ```bash
@@ -18,7 +18,7 @@ $ git clone https://github.com/grammatek/text-cleaner
 # enter the repository
 $ cd text-cleaner
 
-# install dependancies
+# install dependencies
 $ pip install -e .
 ```
 ## Usage
@@ -28,7 +28,7 @@ $ pip install -e .
 # Run the app by passing in a "string" to be cleaned. 
 $ python3 text_cleaner/main.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
 
-['hann bubbi söng . afmælissönginn fyrir pí.']
+['hann bubbi söng. afmælissönginn fyrir pí.']
 ```
 
 ### As import in Python
@@ -43,7 +43,7 @@ clean(
     alphabet=[],                         # list of char that don't need converting     
     punct_set=[],                        # list of punctuation marks set to preserve
     preserve_string=[],                  # list of strings forbidden to strip or convert
-    preserve_emojis=False,                # if True, we preserve emojis
+    preserve_emojis=False,               # if True, we preserve emojis
     clean_emoji=False,                   # if True, we convert emojis to their text description 
     delete_labelled_translations=False,  # if True, we delete all labelled translations
 )
@@ -60,8 +60,9 @@ clean(
 "π á afmæli í dag emójí"
 
 # instead of removing characters, we can convert them to a string of our choice. 
->>> print(clean("π á afmæli í dåg 🎉", char_replacement={'æ':'ae'}, ))
-"pí á afmaeli í dag."
+>>> print(clean("π á afmæli í dåg 🎉", char_replacement={'æ':'ae'}, clean_emoji=True))
+"pí á afmaeli í dag party popper"
+
 ```
 
 
