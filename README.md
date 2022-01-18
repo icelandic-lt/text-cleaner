@@ -65,6 +65,36 @@ clean(
 
 ```
 
+### html preprocessing feature
+
+```python
+from text-cleaner import clean_html
+
+clean_html(
+    "html_document.html",   # name of the html document to "clean"
+    # default value has a comprehensive dictionary of html tags, 
+    # see html_closing_tag_replacement in constants.py for details. 
+    replace_html_closing_tag_with={},   # dictionary with html tags and what their 
+                                        # closing tags are to be replaced with e.g. 
+                                        # {'p':'!'} adds an exclamation mark at the 
+                                        # end of every text embedded in a <p> tag.
+    content_parent_div={"class": "content-text"},   # the parent div that contains 
+                                                    # all the text to be extracted
+    write_to_file='',   # if not left empty, writes to file for given input
+)
+
+# my_audobook.html: 
+#   <h1> hello </h1>
+#   <h2> world </h2>
+
+# basic example
+>>> print(clean_html("my_audiobook.html"))
+"hello. world."
+
+# we can choose what closing tags are replaced by as well as write the output to file
+>>> print(clean_html("my_audiobook.html"), replace_html_closing_tag_with={'h2':'!'}, write_to_file='my_audiobook_cleaned.txt')
+"hello. world!" >>> "my_audiobook_cleaned.txt."
+```
 
 ## Getting help
 
