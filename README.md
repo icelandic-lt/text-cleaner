@@ -43,24 +43,32 @@ clean(
     alphabet=[],                         # list of char that don't need converting     
     punct_set=[],                        # list of punctuation marks set to preserve
     preserve_string=[],                  # list of strings forbidden to strip or convert
-    preserve_emojis=False,               # if True, we preserve emojis
-    clean_emoji=False,                   # if True, we convert emojis to their text description 
-    delete_labelled_translations=False,  # if True, we delete all labelled translations
+    preserve_emojis=False,               # if True, preserve emojis
+    clean_emoji=False,                   # if True, convert emojis to their text description 
+    delete_labelled_translations=False,  # if True, delete all labelled translations
 )
 
-# If being used as a part of the TTS-Frontend pipeline, then no configurations should be made. All default 
-# values are configured for input/output specifications between components in the TTS-Frontend pipeline.
+# If being used as a part of the TTS-Frontend pipeline, 
+# then no configurations should be made. All default 
+# values are configured for input/output specifications 
+# between components in the TTS-Frontend pipeline.
 
 # basic example, no arguments set.
 >>> print(clean("π á afmæli í dåg 🎉"))
 "pí á afmæli í dag."
 
-# we can convert emojis to any string and also configure which characters are to be preserved.
->>> print(clean("π á afmæli í dåg 🎉", emoji_replacement="emójí", preserve_string=['π'])
+# we can convert emojis to any string and also configure 
+# which characters are to be preserved.
+>>> print(clean("π á afmæli í dåg 🎉", 
+                emoji_replacement="emójí", 
+                preserve_string=['π'])
 "π á afmæli í dag emójí"
 
-# instead of removing characters, we can convert them to a string of our choice. 
->>> print(clean("π á afmæli í dåg 🎉", char_replacement={'æ':'ae'}, clean_emoji=True))
+# instead of removing characters, we can 
+# convert them to a string of our choice. 
+>>> print(clean("π á afmæli í dåg 🎉", 
+                char_replacement={'æ':'ae'}, 
+                clean_emoji=True))
 "pí á afmaeli í dag party popper"
 
 ```
@@ -92,7 +100,9 @@ clean_html(
 "hello. world."
 
 # we can choose what closing tags are replaced by as well as write the output to file
->>> print(clean_html("my_audiobook.html"), replace_html_closing_tag_with={'h2':'!'}, write_to_file='my_audiobook_cleaned.txt')
+>>> print(clean_html("my_audiobook.html", 
+                     replace_html_closing_tag_with={'h2':'!'},
+                     write_to_file='my_audiobook_cleaned.txt')
 "hello. world!" >>> "my_audiobook_cleaned.txt."
 ```
 
