@@ -121,7 +121,6 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("html_doc", help="html document")
     parser.add_argument("-w", "--write", default="", help="name of the file for the text output")
-
     args = parser.parse_args()
 
     return args
