@@ -6,8 +6,8 @@ from text_cleaner import emoji_dictionary
 
 def update_replacement_dictionary(char_to_replace, replacement) -> None:
     """
-    Adds the input char_to_replace to the collection of (character replacement) 
-    dictionaries, as defined in unicode_maps.
+    Adds the input char_to_replace to the collection of character 
+    replacement dictionaries, as defined in unicode_maps.
     """
     dict = {}
     for cr in char_to_replace: 
@@ -30,7 +30,7 @@ def replace_or_drop(char, token) -> str:
 
 def get_ice_alpha_replacement(char) -> str:
     if char in umaps.post_dict_lookup:
-        # make sure the value returned by post_dict_lookup contains allowed characters
+        # validate the character returned by post_dict_lookup
         for lookup_char in umaps.post_dict_lookup[char].lower(): 
             if lookup_char not in consts.character_alphabet:
                 return ''
@@ -53,7 +53,8 @@ def get_replacement(char) -> str:
         
 
 def labelled_translation_to_ssml(token) -> str:
-    token = token.replace("(e. ", '<lang xml:lang="en-GB"> ') # SSML standard 
+    # SSML 1.1 standard
+    token = token.replace("(e. ", '<lang xml:lang="en-GB"> ') 
     token = token.replace(")", " </lang>")
 
     return token + ' '
@@ -67,24 +68,25 @@ def clean_labelled_translation(token, delete_labelled_translations) -> str:
 
 
 def remove_consecutive_whitespace_and_punctuation(cleaned_text):
-    # the following regex demarks a string that starts with whitespace and trials
-    # with more whitespaces or punctuation marks
+    # the following regex demarks a string that starts with whitespace 
+    # and trials with more whitespaces or punctuation marks
     cleaned_text = re.sub(r'\s+([,.:;?!])', r'\1', cleaned_text)
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', cleaned_text)
 
 
 def text_to_tokens(text) -> list:
     """
-    Splits the input text at whitespaces into tokens. Exception is made within parenthesis to 
-    simplify the cleaning process.
+    Splits the input text at whitespaces into tokens. Exception 
+    is made within parenthesis to simplify the cleaning process.
     """
     # the following regex demarks a string within parentheses (opening and closing parenthesis) 
     return re.split(r'\s(?![^(]*\))', text)
 
 
-def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) -> str:
+def validate_characters(token, string_to_preserve, preserve_emojis, clean_emoji) -> str:
     """
-    Checks each character of the input word (token) to see if it matches any predefined character, as defined
+    Checks each character of the input word (token) to see 
+    if it matches any predefined character, as defined
     in constants or the second input 'string_to_preserve'.
     """
     for _, char in enumerate(token):
@@ -93,11 +95,11 @@ def validate_characters(token, string_to_preserve, preserve_emoji, clean_emoji) 
             token = token.replace(char, repl)
         elif char in string_to_preserve or char.isdigit():
             continue
-        elif char in emoji_dictionary.EMOJI_PATTERN and clean_emoji or preserve_emojis:
+        elif char in emoji_dictionary.EMOJI_PATTERN and (clean_emoji or preserve_emojis):
             if clean_emoji:
-                emoji_desc = emoji_dictionary.EMOJI_PATTERN[char] # replace emojis with their description
-                token = token.replace(char, emoji_desc)
-            elif preserve_emoji:
+                emoji_description = emoji_dictionary.EMOJI_PATTERN[char]
+                token = token.replace(char, emoji_description)
+            elif preserve_emojis:
                 continue
         elif char.lower() not in consts.character_alphabet and consts.punctuation_marks:
             token = replace_or_drop(char, token)
@@ -113,31 +115,31 @@ def clean(
     alphabet=[], 
     punct_set=[], 
     preserve_string=[],
-    preserve_emoji=False,
-    clean_emoji=False,
+    preserve_emojis=False,
+    clean_emojis=False,
     delete_labelled_translations=False,
 ) -> str:
     """
-    Process (clean) the raw input text for NLP (Natural Language Processing) by removing 
-    unhelpful and unusable data, as well as reducing noise.
+    Process (clean) the raw input text for NLP (Natural Language Processing) 
+    by removing unhelpful and unusable data, as well as reducing noise.
     
     Text cleaning is task specific so multiple configurations are made available.
 
     Args:
-        text                            : raw text for cleaning                       
-        char_replacement                : dictionary of characters to convert     
-        emoji_replacement               : str to replace emojis with        
-        punct_replacement               : str to replace punctuations with
-        alphabet                        : list of char that don't need converting     
-        punct_set                       : list of punctuation marks set to preserve
-        preserve_string                 : list of strings forbidden to strip or convert
-        preserve_emoji                  : if True, we preserve emojis
-        delete_labelled_translations    : if True, we preserve foreign translations that are prefixed with '(e.'
-        clean_emoji                     : if True, we convert emojis to their corresponding text description 
+        text                          : raw text for cleaning                       
+        char_replacement              : dictionary of characters to convert     
+        emoji_replacement             : str to replace emojis with        
+        punct_replacement             : str to replace punctuations with
+        alphabet                      : list of char that don't need converting     
+        punct_set                     : list of punctuation marks set to preserve
+        preserve_string               : list of strings forbidden to strip or convert
+        preserve_emoji                : if True, we preserve emojis
+        delete_labelled_translations  : if True, we delete foreign labelled text
+        clean_emoji                   : if True, replace emojis with their description
 
     """
     
-    if emoji_replacement and not clean_emoji and not preserve_emoji:
+    if emoji_replacement and not clean_emojis and not preserve_emojis:
         text = replace_emojis(text, emoji_replacement, preserve_string)
     if char_replacement:
         umaps.replacement_dictionary.update(char_replacement)
@@ -161,7 +163,7 @@ def clean(
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
         else:
-            cleaned_text += validate_characters(token, preserve_string, preserve_emoji, clean_emoji)
+            cleaned_text += validate_characters(token, preserve_string, preserve_emojis, clean_emojis)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     cleaned_text = remove_consecutive_whitespace_and_punctuation(cleaned_text)
@@ -179,7 +181,7 @@ def parse_arguments():
 
 def main():
     text = parse_arguments()
-    print(clean(text))
+    print(clean(text, preserve_emojis=True))
 
 
 if __name__ == '__main__':
