@@ -1,6 +1,5 @@
 # This Python file uses the following encoding: utf-8
-import re
-from text_cleaner import clean, constants
+from text_cleaner import clean
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
@@ -13,10 +12,10 @@ def test_default_clean():
     assert clean.clean("(hello).") == ", hello,"
 
 def test_preserve_characters():
+    assert clean.clean("german 🐍: ßßß", preserve_emojis=True) == "german 🐍: ssssss"
     assert clean.clean("π námundast í 3.14", preserve_string=['π']) == "π námundast í 3.14"
     assert clean.clean("ß Ø", preserve_string=['ß']) == "ß Ö"
     assert clean.clean("🤡😎🔥📌", preserve_string=['🤡','😎'], emoji_replacement='') == "🤡😎"
-    assert clean.clean("german 🐍: ßßß", preserve_emoji=True) == "german 🐍: ßßß"
     assert clean.clean("∫∬∭∮∯∰∱∲∳", preserve_string=['∫','∬','∭','∮','∯','∰','∱','∲','∳']) == "∫∬∭∮∯∰∱∲∳"
     assert clean.clean("Zorro notar ekki hanzka", preserve_string=['Z']) == "Zorro notar ekki hanska"
     # characters stored in unicode_maps
@@ -35,8 +34,8 @@ def test_clean_punctuation():
     assert clean.clean("?. ., ,.", punct_set=[',','.']) == "."
 
 def test_clean_emoji():
-    assert clean.clean("🔥", clean_emoji=True) == "fire"
-    assert clean.clean("a 🧹 is used to play quidditch", clean_emoji=True) == "a broom is used to play kuidditkh"
+    assert clean.clean("🔥", clean_emojis=True) == "fire"
+    assert clean.clean("a 🧹 is used to play quidditch", clean_emojis=True) == "a broom is used to play kuidditkh"
 
 def test_labelled_translations():
     assert clean.clean("algengt er að skrifa Halló Heimur (e. Hello World)", delete_labelled_translations=True) == "algengt er að skrifa Halló Heimur"
