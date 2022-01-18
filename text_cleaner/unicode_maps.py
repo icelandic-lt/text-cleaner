@@ -1,6 +1,6 @@
 """
  This class holds different maps, containing unicode character encodings and their respective
- replacement for the unicode cleaning of raw text see unicode_normalizer.
+ replacement for the unicode cleaning of raw text.
  The maps are by no means finalized, need to be extended and adjusted, as we run into problematic
  characters.
 """
