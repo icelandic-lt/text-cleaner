@@ -67,12 +67,12 @@ def clean_labelled_translation(token, delete_labelled_translations) -> str:
     return ' '
 
 
-def remove_consecutive_whitespace_and_punctuation(cleaned_text):
-    # the following regex demarks a string that starts with whitespace 
-    # and trials with more whitespaces or punctuation marks
-    cleaned_text = re.sub(r'\s+([,.:;?!])', r'\1', cleaned_text)
-    return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', cleaned_text)
-
+def remove_consecutive_punctuation(cleaned_text):
+    # the following regex demarks a string that starts with a punctuation mark,
+    # followed by 1 or more occurrences of 0 or more whitespaces, followed by 1 
+    # or more punctuation marks 
+    return re.sub(r'([,.:;?!])(\s*[,.:;?!]+)+', r'\1', cleaned_text)
+    
 
 def text_to_tokens(text) -> list:
     """
@@ -162,11 +162,13 @@ def clean(
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
+        elif token.startswith('www') or token.startswith('http'):
+            cleaned_text += token + ' '
         else:
             cleaned_text += validate_characters(token, preserve_string, preserve_emojis, clean_emojis)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
-    cleaned_text = remove_consecutive_whitespace_and_punctuation(cleaned_text)
+    cleaned_text = remove_consecutive_punctuation(cleaned_text)
 
     return cleaned_text.strip()
 

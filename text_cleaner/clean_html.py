@@ -19,6 +19,12 @@ def remove_consecutive_punct_marks(text) -> str:
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', text)
 
 
+def clean_up_urls(text):
+    # demarks a string starting with "http", "https" or "www." followed by any 
+    # string up untill a full-stop/comma, followed by one or more whitespace/newline.
+    return re.sub(r'(https?|www.)(.*)(\.|,)+(\s|\n)', r'\1\2 \3 ', text)
+
+
 def tidy_up_text_format(text):
     """
     Removes duplicate punctuation marks, whitespaces or newlines.
@@ -29,6 +35,7 @@ def tidy_up_text_format(text):
 
     text = remove_whitespace_before_punctuation(text)
     text = remove_consecutive_punct_marks(text)
+    text = clean_up_urls(text)
 
     return text
 

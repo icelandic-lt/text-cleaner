@@ -26,4 +26,6 @@ html_closing_tag_replacement = {
     'p':'.',
     'br':'.',
     'hr':'.',
+    'a':'', # leaving this empty helps with links broken in two between <a> tags 
+            # and plain text until books get better (html translators).
 }
