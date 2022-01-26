@@ -162,6 +162,8 @@ def clean(
                 if punct_mark in token:
                     token = token.replace(punct_mark, ' , ')
             cleaned_text += token + ' '
+        elif token.startswith('www') or token.startswith('http'):
+            cleaned_text += token + ' '
         else:
             cleaned_text += validate_characters(token, preserve_string, preserve_emojis, clean_emojis)
 
