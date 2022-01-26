@@ -68,14 +68,11 @@ def clean_labelled_translation(token, delete_labelled_translations) -> str:
 
 
 def remove_consecutive_punctuation(cleaned_text):
-    # the following regex demarks a string that starts with whitespace 
-    # and trials with more whitespaces or punctuation marks
-    # cleaned_text = re.sub(r'\s+([,.:;?!])', r'\1', cleaned_text)
-
-    # need to remove consecutive punctuation
-    cleaned_text = re.sub(r'([,.:;?!])(\s+[,.:;?!]+)+', r'\1', cleaned_text)
-    return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', cleaned_text)
-
+    # the following regex demarks a string that starts with a punctuation mark,
+    # followed by 1 or more occurrences of 0 or more whitespaces, followed by 1 
+    # or more punctuation marks 
+    return re.sub(r'([,.:;?!])(\s*[,.:;?!]+)+', r'\1', cleaned_text)
+    
 
 def text_to_tokens(text) -> list:
     """
