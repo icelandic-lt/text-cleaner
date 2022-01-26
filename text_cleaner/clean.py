@@ -67,10 +67,13 @@ def clean_labelled_translation(token, delete_labelled_translations) -> str:
     return ' '
 
 
-def remove_consecutive_whitespace_and_punctuation(cleaned_text):
+def remove_consecutive_punctuation(cleaned_text):
     # the following regex demarks a string that starts with whitespace 
     # and trials with more whitespaces or punctuation marks
-    cleaned_text = re.sub(r'\s+([,.:;?!])', r'\1', cleaned_text)
+    # cleaned_text = re.sub(r'\s+([,.:;?!])', r'\1', cleaned_text)
+
+    # need to remove consecutive punctuation
+    cleaned_text = re.sub(r'([,.:;?!])(\s+[,.:;?!]+)+', r'\1', cleaned_text)
     return re.sub(r'([,.:;?!])[,.:;?!]+', r'\1', cleaned_text)
 
 
@@ -168,7 +171,7 @@ def clean(
             cleaned_text += validate_characters(token, preserve_string, preserve_emojis, clean_emojis)
 
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
-    cleaned_text = remove_consecutive_whitespace_and_punctuation(cleaned_text)
+    cleaned_text = remove_consecutive_punctuation(cleaned_text)
 
     return cleaned_text.strip()
 
