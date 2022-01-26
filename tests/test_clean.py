@@ -3,13 +3,13 @@ from text_cleaner import clean
 
 def test_default_clean():
     assert clean.clean("π námundast í 3.14") == "pí námundast í 3.14"
-    assert clean.clean("we convert all 😎 emojis 😎 to .") == "ve konvert all. emojis. to."
+    assert clean.clean("we convert all 😎 emojis 😎 to .") == "ve konvert all . emojis . to ."
     assert clean.clean("📌 red pin") == ". red pin"
     assert clean.clean("ß Ø") == "ss Ö"
     assert clean.clean("<p> HTML tög </p>") == "p HTML tög p"
     assert clean.clean("raki (e. humidity)") == 'raki <lang xml:lang="en-GB"> humidity </lang>'
     assert clean.clean("123") == "123"
-    assert clean.clean("(hello).") == ", hello,"
+    assert clean.clean("(hello).") == ", hello ,"
 
 def test_preserve_characters():
     assert clean.clean("german 🐍: ßßß", preserve_emojis=True) == "german 🐍: ssssss"
@@ -26,7 +26,7 @@ def test_preserve_characters():
     assert clean.clean("z zz zzz zzzz", preserve_string=['zz']) == "s zz sss ssss"
     assert clean.clean("z zz zzz zzzz", preserve_string=['zz', 'zzzz']) == "s zz sss zzzz"
     assert clean.clean("Barizt hefur Zorro, margoft án hanzka", preserve_string=['Zorro']) == "Barist hefur Zorro, margoft án hanska"
-    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", preserve_string=['Zwoozh']) == ", Zwoozh, er ekki íslenskt orð."
+    assert clean.clean("(Zwoozh) er ekki ízlenzkt orð.", preserve_string=['Zwoozh']) == ", Zwoozh , er ekki íslenskt orð."
     
 def test_clean_punctuation():
     # replace punct set
