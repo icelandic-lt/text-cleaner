@@ -170,7 +170,7 @@ def clean(
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     cleaned_text = remove_consecutive_punctuation(cleaned_text)
 
-    return cleaned_text.strip()
+    return [cleaned_text.strip()]
 
 
 def parse_arguments():
@@ -178,12 +178,13 @@ def parse_arguments():
     parser.add_argument('text', help="a text to be cleaned")
     args = parser.parse_args()
     
-    return args.text
+    return args
 
 
 def main():
-    text = parse_arguments()
-    print(clean(text, preserve_emojis=True))
+    cmdline_args = parse_arguments()
+    text = cmdline_args.text
+    print(clean(text))
 
 
 if __name__ == '__main__':
