@@ -23,17 +23,16 @@ $ pip install -e .
 ```
 ## Usage
 
-### Command line tool
+### Via the command line tool
 ```bash
 # Run the app by passing in a "string" to be cleaned. 
-$ python3 text_cleaner/main.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
-
-['hann bubbi söng. afmælissönginn fyrir pí.']
+$ python3 text_cleaner/clean.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
+['Hann Bubbi söng . afmælissönginn fyrir pí.']
 ```
 
-### As import in Python
+### As an import in Python
 ```python
-from text-cleaner import clean
+from text_cleaner import clean
 
 clean(
     "text to be cleaned",                  
@@ -44,7 +43,7 @@ clean(
     punct_set=[],                        # list of punctuation marks set to preserve
     preserve_string=[],                  # list of strings forbidden to strip or convert
     preserve_emojis=False,               # if True, preserve emojis
-    clean_emoji=False,                   # if True, convert emojis to their text description 
+    clean_emojis=False,                  # if True, convert emojis to their text description 
     delete_labelled_translations=False,  # if True, delete all labelled translations
 )
 
@@ -53,30 +52,51 @@ clean(
 # values are configured for input/output specifications 
 # between components in the TTS-Frontend pipeline.
 
-# basic example, no arguments set.
+# basic example, no arguments.
 >>> print(clean("π á afmæli í dåg 🎉"))
-"pí á afmæli í dag."
+"pí á afmæli í dog ."
 
-# we can convert emojis to any string and also configure 
+# convert emojis to any string and also configure 
 # which characters are to be preserved.
 >>> print(clean("π á afmæli í dåg 🎉", 
                 emoji_replacement="emójí", 
-                preserve_string=['π'])
-"π á afmæli í dag emójí"
+                preserve_string=['π']))
+"π á afmæli í dog emójí"
 
-# instead of removing characters, we can 
-# convert them to a string of our choice. 
+# instead of removing characters, we 
+# can convert them to any string. 
 >>> print(clean("π á afmæli í dåg 🎉", 
                 char_replacement={'æ':'ae'}, 
-                clean_emoji=True))
-"pí á afmaeli í dag party popper"
+                clean_emojis=True))
+"pí á afmaeli í dog party popper"
+
+```
+## Usage for html preprocessing feature
+
+### Via the command line tool
+```bash
+# html doc 'my_audobook.html' stored in root:
+# <div class="content-text">
+#    <h1>hello</h1>
+#    <h2>world</h2>
+# </div>
+
+# run the html preprocessing feature by by passing in the name of the html document.
+$ python3 text_cleaner/clean_html.py "my_audiobook.html"
+hello.
+world.
+
+# use the -w flag if you want the output to be written to a file.
+$ python3 text_cleaner/clean_html.py "my_audiobook.html" -w "output_file.txt"
+hello.
+world.
 
 ```
 
-### html preprocessing feature
+### As an import in Python
 
 ```python
-from text-cleaner import clean_html
+from text_cleaner import clean_html
 
 clean_html(
     "html_document.html",   # name of the html document to "clean"
@@ -91,19 +111,23 @@ clean_html(
     write_to_file='',   # if not left empty, writes to file for given input
 )
 
-# my_audobook.html: 
-#   <h1> hello </h1>
-#   <h2> world </h2>
+# html doc 'my_audobook.html' stored in root:
+# <div class="content-text">
+#    <h1>hello</h1>
+#    <h2>world</h2>
+# </div>
 
-# basic example
+# basic example, no arguments.
 >>> print(clean_html("my_audiobook.html"))
-"hello. world."
+hello. 
+world.
 
 # we can choose what closing tags are replaced by as well as write the output to file
 >>> print(clean_html("my_audiobook.html", 
                      replace_html_closing_tag_with={'h2':'!'},
-                     write_to_file='my_audiobook_cleaned.txt')
-"hello. world!" >>> "my_audiobook_cleaned.txt."
+                     write_to_file='my_audiobook_cleaned.txt'))
+hello.
+world!
 ```
 
 ## Getting help
