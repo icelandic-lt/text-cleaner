@@ -170,7 +170,7 @@ def clean(
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     cleaned_text = remove_consecutive_punctuation(cleaned_text)
 
-    return [cleaned_text.strip()]
+    return cleaned_text.strip()
 
 
 def parse_arguments():

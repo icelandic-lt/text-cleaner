@@ -27,7 +27,7 @@ $ pip install -e .
 ```bash
 # Run the app by passing in a "string" to be cleaned. 
 $ python3 text_cleaner/clean.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
-['Hann Bubbi söng . afmælissönginn fyrir pí.']
+"Hann Bubbi söng . afmælissönginn fyrir pí."
 ```
 
 ### As an import in Python
