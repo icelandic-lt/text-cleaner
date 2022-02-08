@@ -1,4 +1,4 @@
-import argparse
+import argparse, sys
 import re
 from text_cleaner import unicode_maps as umaps
 from text_cleaner import constants as consts
@@ -175,15 +175,24 @@ def clean(
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('text', help="a text to be cleaned")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--infile', '-i', nargs='?', type=argparse.FileType('r'), default=sys.stdin, help="Text file to be cleaned")
+    group.add_argument('text', nargs='?', type=str, help='Input string to be cleaned')
     args = parser.parse_args()
     
     return args
 
 
 def main():
-    cmdline_args = parse_arguments()
-    text = cmdline_args.text
+    args = parse_arguments()
+    if args.text:
+        text = args.text
+    elif args.infile == sys.stdin and sys.stdin.isatty():
+        print("Please provide an input file or a string to be cleaned")
+        raise ValueError("No input given")
+    else:
+        text = args.infile.read()
+
     print(clean(text))
 
 
