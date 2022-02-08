@@ -187,13 +187,17 @@ def main():
     args = parse_arguments()
     if args.text:
         text = args.text
+        print(clean(text))
     elif args.infile == sys.stdin and sys.stdin.isatty():
         print("Please provide an input file or a string to be cleaned")
         raise ValueError("No input given")
     else:
-        text = args.infile.read()
-
-    print(clean(text))
+        file_content = args.infile.read().splitlines()
+        cleaned_arr = []
+        for line in file_content:
+            cleaned_arr.append(clean(line))
+        for elem in cleaned_arr:
+            print(elem)
 
 
 if __name__ == '__main__':
