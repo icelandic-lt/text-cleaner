@@ -18,8 +18,12 @@ $ git clone https://github.com/grammatek/text-cleaner
 # enter the repository
 $ cd text-cleaner
 
+# set up your virtual environment and activate it, e.g.:
+$ python -m venv venv
+$ source venv/bin/activate
+
 # install dependencies
-$ pip install -e .
+$ (venv) pip install -e .
 ```
 ## Usage
 
@@ -28,6 +32,9 @@ $ pip install -e .
 # Run the app by passing in a "string" to be cleaned. 
 $ python3 text_cleaner/clean.py "Hann Bubbi söng 🎤 afmælißønginn fyrir π."
 "Hann Bubbi söng . afmælissönginn fyrir pí."
+
+# Clean the content of a text file, line by line:
+$ python3 text_cleaner/clean.py your_text_file.txt
 ```
 
 ### As an import in Python
