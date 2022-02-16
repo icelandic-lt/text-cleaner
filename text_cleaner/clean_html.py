@@ -87,6 +87,12 @@ def extract_html_from_file(html_doc, extract_from_div) -> element.Tag:
     return soup
 
 
+def extract_html_from_string(html_str: str, extract_from_div: dict, top_elem='div') -> element.Tag:
+    soup = beautiful_soup(html_str, features='html.parser')
+
+    return soup
+
+
 def clean_html(
     html_doc,
     replace_html_closing_tag_with={},
@@ -120,6 +126,37 @@ def clean_html(
         f = open(write_to_file, "a")
         f.write(str(text))
         f.close()
+
+    return text
+
+
+def clean_html_string(
+        html_str: str,
+        replace_html_closing_tag_with={},
+        content_parent_div={"class": "content-text"},
+        top_elem="div"
+) -> str:
+    """
+    Preprocess html string input for text cleaning by parsing text content
+    specified by input, by removing and replacing html tags based on dictionary input.
+    The parent div of the content to be parsed and cleaned has to be specified so the
+    html cleaner can distinct between what's relevant.
+
+    Args:
+        html_str                        : html string to extract from
+        replace_html_closing_tag_with   : dictionary of html tags to be convert
+        content_parent_div              : the parent div of all the content to be parsed
+    """
+
+    if replace_html_closing_tag_with:
+        consts.html_closing_tag_replacement.update(replace_html_closing_tag_with)
+
+    html_soup = extract_html_from_string(html_str, content_parent_div, top_elem)
+    html_soup = clean_html_tables(html_soup)
+    html_soup = append_punctuation_to_tag_content(html_soup)
+
+    text = html_soup.get_text()
+    text = tidy_up_text_format(text)
 
     return text
 
