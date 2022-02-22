@@ -10,6 +10,7 @@ def test_default_clean():
     assert clean("raki (e. humidity)") == 'raki <lang xml:lang="en-GB"> humidity </lang>'
     assert clean("123") == "123"
     assert clean("(hello).") == ", hello ,"
+    assert clean("Leikurinn fór 5-2 fyrir ÍA") == "Leikurinn fór 5-2 fyrir ÍA"
 
 def test_preserve_characters():
     assert clean("german 🐍: ßßß", preserve_emojis=True) == "german 🐍: ssssss"

@@ -22,7 +22,7 @@ def replace_or_drop(char, token) -> str:
         token = token.replace(char, replacement)
     elif (char == '(' or char == ')' or char == '"'):
         token =  token.replace(char, " , ")
-    elif char not in consts.punctuation_marks and umaps.replacement_dictionary.values():
+    elif char not in consts.punctuation_marks and char not in umaps.replacement_dictionary.values():
         token = token.replace(char, ' ')
     
     return token
@@ -101,7 +101,7 @@ def validate_characters(token, string_to_preserve, preserve_emojis, clean_emoji)
                 token = token.replace(char, emoji_description)
             elif preserve_emojis:
                 continue
-        elif char.lower() not in consts.character_alphabet and consts.punctuation_marks:
+        elif char.lower() not in consts.character_alphabet and char not in consts.punctuation_marks:
             token = replace_or_drop(char, token)
 
     return token + ' '
