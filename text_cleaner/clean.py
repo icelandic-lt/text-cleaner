@@ -23,7 +23,7 @@ def replace_or_drop(char, token) -> str:
     elif (char == '(' or char == ')' or char == '"'):
         token =  token.replace(char, " , ")
     elif char not in consts.punctuation_marks and char not in umaps.replacement_dictionary.values():
-        token = token.replace(char, ' ')
+        token = token.replace(char, '')
     
     return token
 
