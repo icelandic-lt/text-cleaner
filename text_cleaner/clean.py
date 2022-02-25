@@ -23,7 +23,7 @@ def replace_or_drop(char, token) -> str:
     elif (char == '(' or char == ')' or char == '"'):
         token =  token.replace(char, " , ")
     elif char not in consts.punctuation_marks and char not in umaps.replacement_dictionary.values():
-        token = token.replace(char, ' ')
+        token = token.replace(char, '')
     
     return token
 
@@ -184,6 +184,7 @@ def parse_arguments():
 
 
 def main():
+    """
     args = parse_arguments()
     if args.text:
         text = args.text
@@ -198,7 +199,10 @@ def main():
             cleaned_arr.append(clean(line))
         for elem in cleaned_arr:
             print(elem)
-
+            """
+    text = "Græn­lands­haf snemma í morg­un og mun hún senda óveður yfir landið í dag. Öllu flugi til og frá Ak­ur­eyri, Eg­ils­stöðum, Ísaf­irði og Vest­manna­eyj­um hef­ur verið af­lýst út dag­inn. "
+    cleaned = clean(text)
+    print(cleaned)
 
 if __name__ == '__main__':
     main()

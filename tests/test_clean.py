@@ -11,6 +11,8 @@ def test_default_clean():
     assert clean("123") == "123"
     assert clean("(hello).") == ", hello ,"
     assert clean("Leikurinn fór 5-2 fyrir ÍA") == "Leikurinn fór 5-2 fyrir ÍA"
+    assert clean("Græn­lands­haf snemma í morg­un.") == "Grænlandshaf snemma í morgun."
+
 
 def test_preserve_characters():
     assert clean("german 🐍: ßßß", preserve_emojis=True) == "german 🐍: ssssss"
@@ -67,6 +69,6 @@ def test_replace_character():
     assert clean("aábdð", char_replacement={'a': 'k'}) == "kábdð"
     assert clean("abdð", char_replacement={'ð': 'eéfghi'}) == "kbdeéfghi"
     # replace alphabet
-    assert clean("aábdð", alphabet=['a','b','c','d']) == "k bdeéfghi"
-    assert clean("abcdefghijklmnopqrstuvwxyz") == "bcd"
+    assert clean("aábdð", alphabet=['a','b','c','d']) == "kbdeéfghi"
+    assert clean("abcdefghijklmnopqrstuvwxyz") == "kbcdegikos"
 
