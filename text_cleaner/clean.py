@@ -28,6 +28,7 @@ EN_LABEL = '(e. '
 SSML_LANG_START = '<lang xml:lang="en-GB"> '
 SSML_LANG_END = ' </lang>'
 
+
 class TextCleaner:
 
     def __init__(self, replacement_dict={}, post_dict={}, char_replacement={}, punct_replacement='', alphabet=[],
