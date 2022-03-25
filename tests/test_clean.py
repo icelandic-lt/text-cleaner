@@ -1,5 +1,6 @@
 # This Python file uses the following encoding: utf-8
 from text_cleaner import *
+import text_cleaner.unicode_maps as umaps
 
 
 def test_default_clean():
@@ -86,6 +87,8 @@ def test_replace_character():
                           char_replacement={'a': 'k', 'ð': 'eéfghi'})
     assert cleaner.clean("aábd") == "kábd"
     assert cleaner.clean("abdð") == "kbdeéfghi"
+    cleaner = TextCleaner(replacement_dict=umaps.replacement_dictionary, post_dict=umaps.post_dict_lookup)
+    assert cleaner.clean("abdð") == "abdð"
     # replace alphabet
     cleaner = TextCleaner(replacement_dict=umaps.replacement_dictionary, post_dict=umaps.post_dict_lookup,
                           char_replacement={'a': 'k', 'ð': 'eéfghi'}, alphabet=['a', 'b', 'c', 'd'])

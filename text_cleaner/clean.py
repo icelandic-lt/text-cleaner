@@ -62,7 +62,8 @@ class TextCleaner:
         :param delete_labelled_translations: if True, we delete text/tokens labelled as foreign, default is False
 
         """
-        self.replacement_dictionary = replacement_dict
+        # since we might alter replacement_dictionary, make a copy of the parameter dictionary
+        self.replacement_dictionary = replacement_dict.copy()
         self.post_dict_lookup = post_dict
         if char_replacement:
             self.update_replacement_dictionary(char_replacement)
@@ -78,7 +79,7 @@ class TextCleaner:
         else:
             self.alphabet = consts.character_alphabet
         self.preserve_strings = preserve_strings
-        self.delete_tranlsations = delete_labelled_translations
+        self.delete_translations = delete_labelled_translations
         if preserve_emojis:
             self.preserve_emojis = True
             self.describe_emojis = False
@@ -248,7 +249,7 @@ class TextCleaner:
         return ''
 
     def clean_labelled_translation(self, token) -> str:
-        if self.delete_tranlsations:
+        if self.delete_translations:
             return ' '
         else:
             return self.labelled_translation_to_ssml(token)
@@ -256,7 +257,7 @@ class TextCleaner:
     def update_replacement_dictionary(self, custom_replacements: dict) -> None:
         """
         Adds the custom_replacements to the collection of character
-        replacement dictionaries, as defined in unicode_maps.
+        replacement dictionaries, as defined in self.replacement_dictionary
         """
         if type(custom_replacements) is dict:
             self.replacement_dictionary.update(custom_replacements)
