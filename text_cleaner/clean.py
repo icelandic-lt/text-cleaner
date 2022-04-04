@@ -62,6 +62,7 @@ class TextCleaner:
         :param delete_labelled_translations: if True, we delete text/tokens labelled as foreign, default is False
 
         """
+
         # since we might alter replacement_dictionary, make a copy of the parameter dictionary
         self.replacement_dictionary = replacement_dict.copy()
         self.post_dict_lookup = post_dict
@@ -147,7 +148,7 @@ class TextCleaner:
             # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
             if token.startswith(EN_LABEL):
                 cleaned_text += self.clean_labelled_translation(token)
-            elif token.strip('r'+COMMON_PUNCT) in self.preserve_strings:
+            elif token in self.preserve_strings or token.strip('r'+COMMON_PUNCT) in self.preserve_strings:
                 # TODO: is this defined somewhere? Why '"()'?
                 token = re.sub(r'["()]', ' , ', token)
                 cleaned_text += token + ' '
@@ -210,7 +211,7 @@ class TextCleaner:
             repl = self.replacement_dictionary[char] if char in self.replacement_dictionary else ''
             if repl:
                 token = token.replace(char, repl)
-            elif char in self.preserve_strings or char.isdigit():
+            elif char.isdigit():
                 continue
             elif char in emoji_dictionary.EMOJI_PATTERN:
                 # We have already taken care of emojis
