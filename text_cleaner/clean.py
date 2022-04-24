@@ -160,6 +160,7 @@ class TextCleaner:
                 cleaned_text += self.validate_characters(token)
 
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+        cleaned_text = re.sub(r'\n+', ' ', cleaned_text)
         cleaned_text = self.remove_consecutive_punctuation(cleaned_text)
 
         return cleaned_text.strip()
