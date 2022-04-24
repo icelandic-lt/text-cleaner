@@ -82,7 +82,7 @@ class HtmlCleaner:
             # used by each cell to reference it's header content
             table_headers = table.find_all(TABLE_HEADER)
 
-            for row, in table_row:
+            for row in table_row:
                 # list of cells for current row
                 table_cell = row.find_all(TABLE_CELL)
                 for idx2, cell in enumerate(table_cell):
