@@ -149,7 +149,7 @@ class TextCleaner:
                 cleaned_text += self.clean_labelled_translation(token)
             elif token in self.preserve_strings or token.strip('r'+COMMON_PUNCT) in self.preserve_strings:
                 # TODO: is this defined somewhere? Why '"()'?
-                token = re.sub(r'["()]', ' , ', token)
+                #token = re.sub(r'["()]', ' , ', token)
                 cleaned_text += token + ' '
             elif re.match(URL_PATTERN, token):
                 # If not handled separately, the different punctuation symbols in a URL would be deleted/replaced
@@ -227,7 +227,8 @@ class TextCleaner:
             token = token.replace(char, replacement)
         elif char in ['(', ')', '"']:
             # again: where do these symbols come from?
-            token = token.replace(char, " , ")
+            # token = token.replace(char, " , ")
+            pass
         elif char not in self.preserved_punctuation and char not in self.replacement_dictionary.values():
             token = token.replace(char, '')
 

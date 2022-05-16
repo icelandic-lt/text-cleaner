@@ -2,7 +2,7 @@
 character_alphabet = ['a', 'á', 'b', 'd', 'ð', 'e', 'é', 'f', 'g', 'h', 'i', 'í', 'j', 'k', 'l', 'm',
                       'n', 'o', 'ó', 'p', 'r', 's', 't', 'u', 'ú', 'v', 'y', 'ý', 'þ', 'æ', 'ö', 'x']
                       
-punctuation_marks = {'.',',',':','!','?', '/', '<', '>'}
+punctuation_marks = {'.',',',':','!','?', '/', '<', '>', '%'}
 
 # html_clean.py
 html_closing_tag_replacement = {
