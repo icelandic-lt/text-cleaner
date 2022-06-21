@@ -23,7 +23,7 @@ from text_cleaner import emoji_dictionary
 # Common punctuation symbols, often to be ignored at start/end of tokens
 COMMON_PUNCT = ',.?!:;()'
 URL_PATTERN = '^(www)|(http).*'
-EN_LABEL = '(e. '
+EN_LABEL = '(e.'
 # SSML 1.1 standard
 SSML_LANG_START = '<lang xml:lang="en-GB"> '
 SSML_LANG_END = ' </lang>'
@@ -145,9 +145,11 @@ class TextCleaner:
         cleaned_text = ''
         for token in clean_text:
             # TODO: only covers english text atm and assumes it's prefixed by "(e." as is by convention
-            if token.startswith(EN_LABEL):
-                cleaned_text += self.clean_labelled_translation(token)
-            elif token in self.preserve_strings or token.strip('r'+COMMON_PUNCT) in self.preserve_strings:
+            # For token based cleaning, we don't have the context for inserting opening and closing ssml-tags
+            # Will be handled in the manager
+            #if token.strip() == EN_LABEL:
+            #    cleaned_text += self.clean_labelled_translation(token)
+            if token in self.preserve_strings or token.strip('r'+COMMON_PUNCT) in self.preserve_strings:
                 # TODO: is this defined somewhere? Why '"()'?
                 #token = re.sub(r'["()]', ' , ', token)
                 cleaned_text += token + ' '
