@@ -102,7 +102,7 @@ class HtmlCleaner:
         """
         for tag in self.tag_replacements:
             for text_within_tag in text_tag.find_all(tag):
-                text_within_tag.append(self.tag_replacements[tag] + ' ')
+                text_within_tag.append(' ' + self.tag_replacements[tag] + ' ')
 
         return text_tag
 
@@ -115,7 +115,10 @@ def tidy_up_text_format(text):
     text = re.sub(r'\n+', '\n', text).strip()
     text = re.sub(' +', ' ', text)
 
-    text = remove_whitespace_before_punctuation(text)
+    # keep spaces before punctuation, otherwise we are creating unnecessary problems for tokenizer and normalizer
+    # e.g. having a number in a table cell should not be turned into '10.' causing normalization to 'tenth', but
+    # rather kepp the space: '10 .'
+    #text = remove_whitespace_before_punctuation(text)
     text = remove_consecutive_punct_marks(text)
     text = clean_up_urls(text)
 
@@ -133,8 +136,9 @@ def remove_consecutive_punct_marks(text) -> str:
     # punctuation marks while that might not be desired for all tasks.
     
     # the following regex demarks a string with 1 punctuation 
-    # mark followed by 1 or more punctuation marks
-    return re.sub(r'(' + PUNCTUATION + ')' + PUNCTUATION + '+', r'\1', text)
+    # mark followed by 1 or more punctuation marks, with or without spaces in between
+    text = re.sub(r'(' + PUNCTUATION + ')' + '(\s*' + PUNCTUATION + ')+', r'\1', text)
+    return text
 
 
 def clean_up_urls(text):
