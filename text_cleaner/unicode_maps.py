@@ -123,11 +123,12 @@ replacement_dictionary = {**insert_space_map, **diverse_substitutions, **greek_a
                       
 # if those characters are found in normalized words not contained in the pronunciation dictionary,
 # we need to replace them with characters from the Icelandic alphabet
+# Keep all letters from the English alphabet, since the English g2p module will be able to handle those.
 post_dict_lookup = {
-    'c': "k",  # TODO: can we contextualize this?
-    'w': "v",
-    'z': "s",
-    'q': "k",
+    #'c': "k",  # TODO: can we contextualize this?
+    #'w': "v",
+    #'z': "s",
+    #'q': "k",
     'å': "o",
     'ä': "e",
     'ü': "u",
@@ -140,10 +141,10 @@ post_dict_lookup = {
     'ß': "ss",
     'ź': "s",
     'ż': "s",
-    'C': "K",  # TODO: can we contextualize this?
-    'W': "V",
-    'Z': "S",
-    'Q': "K",
+    #'C': "K",  # TODO: can we contextualize this?
+    #'W': "V",
+    #'Z': "S",
+    #'Q': "K",
     'Å': "O",
     'Ä': "E",
     'Ü': "U",
