@@ -12,3 +12,6 @@ dist/
 
 # Vscode project specific settings
 .vscode 
+
+# Virtual environments
+venv/

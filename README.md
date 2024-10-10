@@ -1,6 +1,44 @@
-# Text Cleaner 
+<!-- omit in toc -->
+# Text Cleaner
 
-## Introduction
+![Version](https://img.shields.io/badge/Version-T9-darkviolet)
+![Python](https://img.shields.io/badge/python-3.8-blue?logo=python&logoColor=white)
+![CI Status](https://img.shields.io/badge/CI-[unavailable]-red)
+![Docker](https://img.shields.io/badge/Docker-[unavailable]-green)
+![License: Apache](https://img.shields.io/badge/License-Apache-yellow)
+
+The Text Cleaner tool processes raw text input as the first step in a TTS-Frontend engine,
+with versatile configurations for various tasks. It also includes a preprocessing feature
+for text in HTML documents, designed primarily for audiobooks.
+
+
+## Overview
+
+This repository was created by Grammatek and is
+part of the [Icelandic Language Technology Programme](https://github.com/icelandic-lt/icelandic-lt).
+
+- **Category:** [TTS](https://github.com/icelandic-lt/icelandic-lt/blob/main/doc/tts.md)
+- **Domain:** Application
+- **Languages:** Python
+- **Language Version/Dialect:**
+  - Python: 3.8+
+- **Audience**: Developers, Researchers
+- **License**: Apache
+- **Origins:** [text-cleaner](https://github.com/grammatek/text-cleaner)
+
+## Status
+
+This tool in installable and testable as-is.
+
+An out-of-the-box installation fails 6 out of 10 tests with PyTest,
+probably due to different configuration defaults than the
+tests expect.
+
+## System Requirements
+- Operating System: Linux, Windows, macOS
+- Python 3.8 or higher
+
+## Description
 
 Text cleaning module for processing raw text input.
 
@@ -12,8 +50,8 @@ Coupled with this text cleaning module is a preprocessing feature for text embed
 
 ## Installation
 ```bash
-# clone this repository.
-$ git clone https://github.com/grammatek/text-cleaner
+# clone this repository
+$ git clone https://github.com/icelandic-lt/text-cleaner
 
 # enter the repository
 $ cd text-cleaner
@@ -139,11 +177,13 @@ world!
 
 ## Getting help
 
-Feel free to open an issue inside the [issue tracker](https://github.com/grammatek/text-cleaner/issues). You can also [contact us](mailto:info@grammatek.com) via email.
+Feel free to open an issue inside the [issue tracker](https://github.com/grammatek/text-cleaner/issues).
+You can also [contact the developers](mailto:info@grammatek.com) via email.
 
 ## Contributing
 
-You can contribute to this project by forking it, creating a private branch and opening a new [pull request](https://github.com/grammatek/text-cleaner/pulls).
+You can contribute to this project by forking it, creating a private branch and opening
+a new [pull request](https://github.com/icelandic-lt/text-cleaner/pulls).
 
 ## License
 
